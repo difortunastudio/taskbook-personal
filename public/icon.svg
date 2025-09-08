@@ -1,0 +1,28 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="192" height="192" rx="32" fill="#3B82F6"/>
+  
+  <!-- Book pages -->
+  <rect x="48" y="40" width="96" height="112" rx="8" fill="white"/>
+  <rect x="52" y="44" width="88" height="104" rx="4" fill="#F8FAFC"/>
+  
+  <!-- Binding -->
+  <rect x="48" y="40" width="12" height="112" rx="6" fill="#1E40AF"/>
+  
+  <!-- Lines (notebook style) -->
+  <line x1="68" y1="64" x2="132" y2="64" stroke="#E2E8F0" stroke-width="2"/>
+  <line x1="68" y1="80" x2="132" y2="80" stroke="#E2E8F0" stroke-width="2"/>
+  <line x1="68" y1="96" x2="132" y2="96" stroke="#E2E8F0" stroke-width="2"/>
+  <line x1="68" y1="112" x2="132" y2="112" stroke="#E2E8F0" stroke-width="2"/>
+  <line x1="68" y1="128" x2="132" y2="128" stroke="#E2E8F0" stroke-width="2"/>
+  
+  <!-- Checkmark -->
+  <circle cx="76" cy="80" r="6" fill="#10B981"/>
+  <path d="M73 80L75 82L79 78" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Task text -->
+  <rect x="88" y="76" width="32" height="8" rx="2" fill="#6B7280"/>
+  
+  <!-- Title -->
+  <rect x="68" y="64" width="48" height="6" rx="2" fill="#374151"/>
+</svg>
