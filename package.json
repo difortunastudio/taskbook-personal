@@ -7,6 +7,7 @@
     "dev:local": "next dev",
     "dev:turbo": "next dev --turbopack",
     "build": "prisma generate && next build",
+    "vercel-build": "prisma generate && next build",
     "postinstall": "prisma generate",
     "start": "next start",
     "lint": "eslint",
@@ -45,5 +46,8 @@
     "sharp": "^0.34.3",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "resolutions": {
+    "simple-swizzle": "^0.2.2"
   }
 }
