@@ -3,6 +3,14 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
+interface TaskWhereClause {
+  userId: string
+  OR?: Array<{
+    dueDate?: { gte?: Date; lt?: Date } | null
+    createdAt?: { gte?: Date; lt?: Date }
+  }>
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
@@ -13,7 +21,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const filter = searchParams.get('filter') || 'today'
 
-    let whereClause: any = {
+    let whereClause: TaskWhereClause = {
       userId: session.user.id
     }
 
@@ -24,21 +32,24 @@ export async function GET(request: NextRequest) {
       const tomorrow = new Date(today)
       tomorrow.setDate(tomorrow.getDate() + 1)
 
-      whereClause.OR = [
-        {
-          dueDate: {
-            gte: today,
-            lt: tomorrow
+      whereClause = {
+        ...whereClause,
+        OR: [
+          {
+            dueDate: {
+              gte: today,
+              lt: tomorrow
+            }
+          },
+          {
+            dueDate: null,
+            createdAt: {
+              gte: today,
+              lt: tomorrow
+            }
           }
-        },
-        {
-          dueDate: null,
-          createdAt: {
-            gte: today,
-            lt: tomorrow
-          }
-        }
-      ]
+        ]
+      }
     }
     // Si filter !== 'today', obtener todas las tareas
 

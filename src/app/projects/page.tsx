@@ -126,7 +126,7 @@ export default function Projects() {
     }
     acc[companyId].projects.push(project)
     return acc
-  }, {} as Record<string, { company: any, projects: Project[] }>)
+  }, {} as Record<string, { company: Company, projects: Project[] }>)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
