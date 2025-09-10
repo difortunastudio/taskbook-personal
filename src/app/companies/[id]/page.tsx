@@ -468,7 +468,10 @@ export default function CompanyDetail() {
                 ))}
                 {tasks.length > 5 && (
                   <div className="text-center pt-2">
-                    <button className="text-blue-600 hover:text-blue-700 text-sm">
+                    <button 
+                      onClick={() => router.push(`/companies/${companyId}/tasks`)}
+                      className="text-blue-600 hover:text-blue-700 text-sm hover:underline"
+                    >
                       Ver todas las tareas ({tasks.length})
                     </button>
                   </div>
