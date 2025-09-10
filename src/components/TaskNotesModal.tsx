@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { X, Save, FileText } from "lucide-react"
 
 interface TaskNotesModalProps {
@@ -15,15 +15,44 @@ interface TaskNotesModalProps {
 }
 
 export default function TaskNotesModal({ isOpen, onClose, task, onSave }: TaskNotesModalProps) {
-  const [notes, setNotes] = useState(task.notes || "")
+  const [newNote, setNewNote] = useState("")
   const [saving, setSaving] = useState(false)
+
+  // Limpiar la nueva nota cuando se abre el modal
+  useEffect(() => {
+    if (isOpen) {
+      setNewNote("")
+    }
+  }, [isOpen, task.id])
 
   if (!isOpen) return null
 
   const handleSave = async () => {
+    if (!newNote.trim()) {
+      onClose()
+      return
+    }
+
     setSaving(true)
     try {
-      await onSave(task.id, notes)
+      // Combinar notas existentes con la nueva nota
+      const existingNotes = task.notes || ""
+      const timestamp = new Date().toLocaleString("es-ES", {
+        day: "2-digit",
+        month: "2-digit", 
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      })
+      
+      let combinedNotes = ""
+      if (existingNotes) {
+        combinedNotes = `${existingNotes}\n\n[${timestamp}]\n${newNote.trim()}`
+      } else {
+        combinedNotes = `[${timestamp}]\n${newNote.trim()}`
+      }
+
+      await onSave(task.id, combinedNotes)
       onClose()
     } catch (error) {
       console.error("Error saving notes:", error)
@@ -50,25 +79,43 @@ export default function TaskNotesModal({ isOpen, onClose, task, onSave }: TaskNo
         </div>
 
         {/* Content */}
-        <div className="p-6">
-          <div className="mb-4">
+        <div className="p-6 space-y-4">
+          <div>
             <h3 className="font-medium text-gray-900 mb-1">{task.title}</h3>
-            <p className="text-sm text-gray-500">Añade notas, comentarios o actualizaciones sobre esta tarea</p>
+            <p className="text-sm text-gray-500">Agrega una nueva nota. Las notas anteriores se mantienen al historial.</p>
           </div>
 
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            rows={6}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            placeholder="Escribe tus notas aquí...
+          {/* Notas existentes */}
+          {task.notes && (
+            <div className="bg-gray-50 rounded-lg p-3">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Notas existentes:
+              </label>
+              <div className="text-sm text-gray-600 whitespace-pre-wrap max-h-32 overflow-y-auto">
+                {task.notes}
+              </div>
+            </div>
+          )}
+
+          {/* Nueva nota */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Nueva nota:
+            </label>
+            <textarea
+              value={newNote}
+              onChange={(e) => setNewNote(e.target.value)}
+              rows={6}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              placeholder="Escribe tu nueva nota aquí...
 
 Ejemplos:
 • Reunión con cliente a las 3pm
 • Pendiente revisar documentos
 • Actualizar presupuesto
 • Llamar para confirmar detalles"
-          />
+            />
+          </div>
         </div>
 
         {/* Footer */}
