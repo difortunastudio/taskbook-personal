@@ -140,19 +140,27 @@ export default function Home() {
     }
   }
 
-  const handleSaveNotes = async (taskId: string, notes: string) => {
+  const handleSaveNotes = async (taskId: string, newNote: string) => {
+    console.log("=== HOME DEBUG ===")
+    console.log("Sending to API:", { taskId, appendNote: newNote })
+    
     try {
       const response = await fetch(`/api/tasks/${taskId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notes })
+        body: JSON.stringify({ appendNote: newNote })
       })
 
+      console.log("API Response status:", response.status)
+      
       if (response.ok) {
         const updatedTask = await response.json()
+        console.log("Updated task received:", updatedTask)
         setRecentTasks(recentTasks.map(task => 
           task.id === taskId ? { ...task, notes: updatedTask.notes } : task
         ))
+      } else {
+        console.error("API Error:", await response.text())
       }
     } catch (error) {
       console.error("Error updating task notes:", error)

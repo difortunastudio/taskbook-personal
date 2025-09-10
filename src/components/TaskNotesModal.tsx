@@ -33,26 +33,15 @@ export default function TaskNotesModal({ isOpen, onClose, task, onSave }: TaskNo
       return
     }
 
+    console.log("=== MODAL DEBUG ===")
+    console.log("Task ID:", task.id)
+    console.log("New note:", newNote.trim())
+    console.log("Existing task notes:", task.notes)
+
     setSaving(true)
     try {
-      // Combinar notas existentes con la nueva nota
-      const existingNotes = task.notes || ""
-      const timestamp = new Date().toLocaleString("es-ES", {
-        day: "2-digit",
-        month: "2-digit", 
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-      })
-      
-      let combinedNotes = ""
-      if (existingNotes) {
-        combinedNotes = `${existingNotes}\n\n[${timestamp}]\n${newNote.trim()}`
-      } else {
-        combinedNotes = `[${timestamp}]\n${newNote.trim()}`
-      }
-
-      await onSave(task.id, combinedNotes)
+      // Enviar solo la nueva nota, el backend se encarga de agregarla
+      await onSave(task.id, newNote.trim())
       onClose()
     } catch (error) {
       console.error("Error saving notes:", error)

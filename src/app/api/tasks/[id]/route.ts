@@ -13,8 +13,11 @@ export async function PATCH(
       return NextResponse.json({ message: "No autorizado" }, { status: 401 })
     }
 
-    const { completed, title, description, notes } = await request.json()
+    const { completed, title, description, notes, appendNote } = await request.json()
     const { id: taskId } = await params
+
+    console.log("=== DEBUG TASK UPDATE ===")
+    console.log("Request data:", { completed, title, description, notes, appendNote })
 
     // Verificar que la tarea pertenece al usuario
     const existingTask = await prisma.task.findFirst({
@@ -24,6 +27,8 @@ export async function PATCH(
       }
     })
 
+    console.log("Existing task notes:", existingTask?.notes)
+
     if (!existingTask) {
       return NextResponse.json(
         { message: "Tarea no encontrada" },
@@ -31,14 +36,41 @@ export async function PATCH(
       )
     }
 
+    // Preparar las notas finales
+    let finalNotes = notes // Para edición completa de notas
+    
+    // Si es para agregar una nueva nota, combinarla con las existentes
+    if (appendNote && appendNote.trim()) {
+      const timestamp = new Date().toLocaleString("es-ES", {
+        day: "2-digit",
+        month: "2-digit", 
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      })
+      
+      const existingNotes = existingTask.notes || ""
+      if (existingNotes) {
+        finalNotes = `${existingNotes}\n\n[${timestamp}]\n${appendNote.trim()}`
+      } else {
+        finalNotes = `[${timestamp}]\n${appendNote.trim()}`
+      }
+    }
+
+    console.log("Final notes:", finalNotes)
+
+    // Preparar data para actualizar
+    const updateData: any = {}
+    if (completed !== undefined) updateData.completed = completed
+    if (title) updateData.title = title
+    if (description !== undefined) updateData.description = description
+    if (finalNotes !== undefined) updateData.notes = finalNotes
+
+    console.log("Update data:", updateData)
+
     const updatedTask = await prisma.task.update({
       where: { id: taskId },
-      data: {
-        ...(completed !== undefined && { completed }),
-        ...(title && { title }),
-        ...(description !== undefined && { description }),
-        ...(notes !== undefined && { notes })
-      },
+      data: updateData,
       include: {
         company: {
           select: {
