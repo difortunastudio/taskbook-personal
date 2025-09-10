@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react"
 import { useRouter, useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { BookOpen, ArrowLeft, Edit, Save, X, Building, Mail, Phone, MapPin, FileText, Hash, CreditCard, Lock, Plus, CheckSquare, Square } from "lucide-react"
+import { BookOpen, ArrowLeft, Edit, Save, X, Building, Mail, Phone, MapPin, FileText, Hash, CreditCard, Lock, Plus, CheckSquare, Square, ClipboardList } from "lucide-react"
 
 interface Company {
   id: string
@@ -434,7 +434,7 @@ export default function CompanyDetail() {
         </div>
 
         {/* Projects and Tasks Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Recent Tasks */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex justify-between items-center mb-4">
@@ -502,6 +502,33 @@ export default function CompanyDetail() {
                 ))}
               </div>
             )}
+          </div>
+
+          {/* Memoria Contable */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Memoria Contable</h3>
+              <button 
+                onClick={() => router.push(`/companies/${params?.id}/records`)}
+                className="text-blue-600 hover:text-blue-700 text-sm"
+              >
+                <ClipboardList className="h-4 w-4 inline mr-1" />
+                Ver memoria
+              </button>
+            </div>
+            
+            <div className="text-center py-8">
+              <ClipboardList className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500 mb-4">
+                Anota cambios contables, decisiones importantes y cualquier información relevante de la empresa
+              </p>
+              <button 
+                onClick={() => router.push(`/companies/${params?.id}/records`)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+              >
+                Abrir Memoria Contable
+              </button>
+            </div>
           </div>
         </div>
       </main>
