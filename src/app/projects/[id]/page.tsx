@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, use } from "react"
 import { BookOpen, ArrowLeft, CheckCircle, Circle, Plus, Calendar, Building, User, Edit3, Trash2 } from "lucide-react"
 
 interface Project {
@@ -30,7 +30,8 @@ interface Task {
   createdAt: string
 }
 
-export default function ProjectDetail({ params }: { params: { id: string } }) {
+export default function ProjectDetail({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params)
   const { data: session, status } = useSession()
   const router = useRouter()
   const [project, setProject] = useState<Project | null>(null)
@@ -51,11 +52,11 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     }
     
     fetchProject()
-  }, [session, status, router, params.id])
+  }, [session, status, router, resolvedParams.id])
 
   const fetchProject = async () => {
     try {
-      const response = await fetch(`/api/projects/${params.id}`)
+      const response = await fetch(`/api/projects/${resolvedParams.id}`)
       if (response.ok) {
         const data = await response.json()
         setProject(data)

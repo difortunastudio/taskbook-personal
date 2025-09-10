@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 0.0.0.0",
-    "dev:local": "next dev",
-    "dev:turbo": "next dev --turbopack",
+    "dev": "node node_modules/next/dist/bin/next dev -H 0.0.0.0",
+    "dev:local": "node node_modules/next/dist/bin/next dev",
+    "dev:safe": "node node_modules/next/dist/bin/next dev -p 3001",
+    "dev:turbo": "node node_modules/next/dist/bin/next dev --turbopack",
     "build": "prisma generate && next build",
     "vercel-build": "prisma generate && next build",
     "postinstall": "prisma generate",
