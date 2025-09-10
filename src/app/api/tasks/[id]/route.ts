@@ -16,9 +16,6 @@ export async function PATCH(
     const { completed, title, description, notes, appendNote } = await request.json()
     const { id: taskId } = await params
 
-    console.log("=== DEBUG TASK UPDATE ===")
-    console.log("Request data:", { completed, title, description, notes, appendNote })
-
     // Verificar que la tarea pertenece al usuario
     const existingTask = await prisma.task.findFirst({
       where: {
@@ -26,8 +23,6 @@ export async function PATCH(
         userId: session.user.id
       }
     })
-
-    console.log("Existing task notes:", existingTask?.notes)
 
     if (!existingTask) {
       return NextResponse.json(
@@ -57,16 +52,12 @@ export async function PATCH(
       }
     }
 
-    console.log("Final notes:", finalNotes)
-
     // Preparar data para actualizar
     const updateData: any = {}
     if (completed !== undefined) updateData.completed = completed
     if (title) updateData.title = title
     if (description !== undefined) updateData.description = description
     if (finalNotes !== undefined) updateData.notes = finalNotes
-
-    console.log("Update data:", updateData)
 
     const updatedTask = await prisma.task.update({
       where: { id: taskId },

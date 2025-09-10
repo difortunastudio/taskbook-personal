@@ -33,11 +33,6 @@ export default function TaskNotesModal({ isOpen, onClose, task, onSave }: TaskNo
       return
     }
 
-    console.log("=== MODAL DEBUG ===")
-    console.log("Task ID:", task.id)
-    console.log("New note:", newNote.trim())
-    console.log("Existing task notes:", task.notes)
-
     setSaving(true)
     try {
       // Enviar solo la nueva nota, el backend se encarga de agregarla
