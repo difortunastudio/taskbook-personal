@@ -38,7 +38,7 @@ export async function GET(
       ...(type && { type })
     }
 
-    const records = await prisma.businessRecord.findMany({
+    const records = await (prisma as any).businessRecord.findMany({
       where,
       orderBy: {
         date: 'desc'
@@ -97,7 +97,7 @@ export async function POST(
       )
     }
 
-    const record = await prisma.businessRecord.create({
+    const record = await (prisma as any).businessRecord.create({
       data: {
         date: new Date(date),
         title,
