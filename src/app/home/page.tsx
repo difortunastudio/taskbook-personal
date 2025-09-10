@@ -224,26 +224,41 @@ export default function Home() {
         {/* Stats Overview */}
         {!loading && (
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-            <div className="bg-white rounded-lg shadow-sm p-4 text-center">
+            <button
+              onClick={() => router.push("/today")}
+              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-blue-50 transition-all cursor-pointer"
+            >
               <div className="text-2xl font-bold text-blue-600">{stats.pendingTasks}</div>
               <div className="text-xs text-gray-600">Tareas pendientes</div>
-            </div>
-            <div className="bg-white rounded-lg shadow-sm p-4 text-center">
+            </button>
+            <button
+              onClick={() => router.push("/today")}
+              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-green-50 transition-all cursor-pointer"
+            >
               <div className="text-2xl font-bold text-green-600">{stats.completedTasks}</div>
               <div className="text-xs text-gray-600">Tareas completadas</div>
-            </div>
-            <div className="bg-white rounded-lg shadow-sm p-4 text-center">
+            </button>
+            <button
+              onClick={() => router.push("/projects")}
+              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-purple-50 transition-all cursor-pointer"
+            >
               <div className="text-2xl font-bold text-purple-600">{stats.totalProjects}</div>
               <div className="text-xs text-gray-600">Proyectos activos</div>
-            </div>
-            <div className="bg-white rounded-lg shadow-sm p-4 text-center">
+            </button>
+            <button
+              onClick={() => router.push("/companies")}
+              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-indigo-50 transition-all cursor-pointer"
+            >
               <div className="text-2xl font-bold text-indigo-600">{stats.totalCompanies}</div>
               <div className="text-xs text-gray-600">Empresas</div>
-            </div>
-            <div className="bg-white rounded-lg shadow-sm p-4 text-center">
+            </button>
+            <button
+              onClick={() => router.push("/today")}
+              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-gray-50 transition-all cursor-pointer"
+            >
               <div className="text-2xl font-bold text-gray-600">{stats.totalTasks}</div>
               <div className="text-xs text-gray-600">Total tareas</div>
-            </div>
+            </button>
           </div>
         )}
 
