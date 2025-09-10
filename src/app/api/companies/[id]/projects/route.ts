@@ -5,9 +5,10 @@ import { prisma } from "@/lib/prisma"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.id) {
@@ -16,7 +17,7 @@ export async function GET(
 
     const projects = await prisma.project.findMany({
       where: {
-        companyId: params.id,
+        companyId: resolvedParams.id,
         userId: session.user.id
       },
       include: {

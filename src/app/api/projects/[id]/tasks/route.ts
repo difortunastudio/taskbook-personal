@@ -5,9 +5,10 @@ import { prisma } from "@/lib/prisma"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.id) {
@@ -17,7 +18,7 @@ export async function GET(
     // Verificar que el proyecto pertenece al usuario
     const project = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id
       }
     })
@@ -31,7 +32,7 @@ export async function GET(
 
     const tasks = await prisma.task.findMany({
       where: {
-        projectId: params.id
+        projectId: resolvedParams.id
       },
       orderBy: {
         createdAt: 'desc'
@@ -50,9 +51,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.id) {
@@ -62,7 +64,7 @@ export async function POST(
     // Verificar que el proyecto pertenece al usuario
     const project = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         userId: session.user.id
       }
     })
@@ -88,7 +90,7 @@ export async function POST(
         title,
         description,
         dueDate: dueDate ? new Date(dueDate) : null,
-        projectId: params.id,
+        projectId: resolvedParams.id,
         companyId: project.companyId,
         userId: session.user.id
       }

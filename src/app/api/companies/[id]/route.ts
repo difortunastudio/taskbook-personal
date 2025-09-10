@@ -5,9 +5,10 @@ import { prisma } from "@/lib/prisma"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {
@@ -16,7 +17,7 @@ export async function GET(
 
     const company = await prisma.company.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         user: {
           email: session.user.email
         }
@@ -47,9 +48,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {
@@ -62,7 +64,7 @@ export async function PATCH(
     // Verificar que la empresa pertenece al usuario
     const existingCompany = await prisma.company.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         user: {
           email: session.user.email
         }
@@ -75,7 +77,7 @@ export async function PATCH(
 
     const updatedCompany = await prisma.company.update({
       where: {
-        id: params.id
+        id: resolvedParams.id
       },
       data: {
         name,
@@ -110,9 +112,10 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {
@@ -122,7 +125,7 @@ export async function DELETE(
     // Verificar que la empresa pertenece al usuario
     const existingCompany = await prisma.company.findFirst({
       where: {
-        id: params.id,
+        id: resolvedParams.id,
         user: {
           email: session.user.email
         }
@@ -135,7 +138,7 @@ export async function DELETE(
 
     await prisma.company.delete({
       where: {
-        id: params.id
+        id: resolvedParams.id
       }
     })
 
