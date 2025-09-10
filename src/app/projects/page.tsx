@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { BookOpen, Plus, FileText, Building, Users, CheckCircle, Circle, ArrowRight } from "lucide-react"
+import DifortunaLogo from "@/components/DifortunaLogo"
 
 interface Project {
   id: string
@@ -135,8 +136,8 @@ export default function Projects() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center cursor-pointer" onClick={() => router.push("/home")}>
-              <BookOpen className="h-8 w-8 text-blue-600" />
-              <h1 className="ml-2 text-2xl font-bold text-gray-900">TaskBook</h1>
+              <DifortunaLogo className="text-blue-600" size={32} variant="simple" />
+              <h1 className="ml-3 text-2xl font-bold text-gray-900">TaskBook</h1>
             </div>
             <div className="flex items-center space-x-4">
               <button 

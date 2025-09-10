@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { BookOpen, Plus, CheckSquare, Calendar, CheckCircle, Circle, Building, FolderOpen, Clock, FileText } from "lucide-react"
 import TaskNotesModal from "@/components/TaskNotesModal"
+import DifortunaLogo from "@/components/DifortunaLogo"
 
 interface Task {
   id: string
@@ -177,8 +178,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center cursor-pointer" onClick={() => router.push("/home")}>
-              <BookOpen className="h-8 w-8 text-blue-600" />
-              <h1 className="ml-2 text-2xl font-bold text-gray-900">TaskBook</h1>
+              <DifortunaLogo className="text-blue-600" size={32} variant="simple" />
+              <h1 className="ml-3 text-2xl font-bold text-gray-900">TaskBook</h1>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm font-medium text-blue-600 px-3 py-1 bg-blue-50 rounded-full">
