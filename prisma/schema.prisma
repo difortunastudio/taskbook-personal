@@ -20,6 +20,7 @@ model User {
   projects  Project[]
   tasks     Task[]
   businessRecords BusinessRecord[]
+  tags      Tag[]
 
   @@map("users")
 }
@@ -44,6 +45,7 @@ model Company {
   projects      Project[]
   tasks         Task[]
   businessRecords BusinessRecord[]
+  tags          CompanyTag[]
 
   @@map("companies")
 }
@@ -80,6 +82,7 @@ model Task {
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   project     Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   company     Company?  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  tags        TaskTag[]
 
   @@map("tasks")
 }
@@ -127,16 +130,65 @@ model BusinessRecord {
   description String
   type        String   // "contable", "decision", "nota"
   reference   String?  // Referencia opcional
-  tags        String?  // Tags opcionales
   
   // Relaciones
   companyId   String
   company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags        BusinessRecordTag[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@map("memoria_contable")
+}
+
+model Tag {
+  id          String   @id @default(cuid())
+  name        String
+  color       String   @default("#3B82F6")
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks       TaskTag[]
+  companies   CompanyTag[]
+  businessRecords BusinessRecordTag[]
+
+  @@unique([name, userId])
+  @@map("tags")
+}
+
+model TaskTag {
+  id     String @id @default(cuid())
+  taskId String
+  tagId  String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([taskId, tagId])
+  @@map("task_tags")
+}
+
+model CompanyTag {
+  id        String  @id @default(cuid())
+  companyId String
+  tagId     String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, tagId])
+  @@map("company_tags")
+}
+
+model BusinessRecordTag {
+  id               String         @id @default(cuid())
+  businessRecordId String
+  tagId            String
+  businessRecord   BusinessRecord @relation(fields: [businessRecordId], references: [id], onDelete: Cascade)
+  tag              Tag            @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([businessRecordId, tagId])
+  @@map("business_record_tags")
 }
