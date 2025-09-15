@@ -381,96 +381,66 @@ export default function Today() {
             </button>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-md">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Tareas de hoy ({tasks.filter(task => !task.completed).length} pendientes)
-              </h3>
-            </div>
-            <div className="divide-y divide-gray-100">
-              {tasks.map((task) => (
-                <div key={task.id} className="p-6 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start flex-1">
-                      <button
-                        onClick={() => toggleTask(task.id, !task.completed)}
-                        className="mr-4 mt-1 p-1"
-                      >
-                        {task.completed ? (
-                          <CheckCircle className="h-5 w-5 text-green-500" />
-                        ) : (
-                          <Circle className="h-5 w-5 text-gray-400" />
-                        )}
-                      </button>
-                      
-                      <div className="flex-1 min-w-0">
-                        <h4 className={`text-lg font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
-                          {task.title}
-                        </h4>
-                        
-                        {task.description && (
-                          <p className="text-gray-600 mt-1">{task.description}</p>
-                        )}
-
-                        {task.notes && (
-                          <div className="mt-2 p-2 bg-amber-50 border-l-2 border-amber-200 rounded">
-                            <p className="text-sm text-amber-800">
-                              <FileText className="h-3 w-3 inline mr-1" />
-                              {task.notes}
-                            </p>
-                          </div>
-                        )}
-                        
-                        <div className="flex items-center mt-3 space-x-4 text-sm text-gray-500">
-                          {task.company && (
-                            <div className="flex items-center">
-                              <div 
-                                className="w-3 h-3 rounded-full mr-2"
-                                style={{ backgroundColor: task.company.color }}
-                              ></div>
-                              <Building className="h-3 w-3 mr-1" />
-                              <span>{task.company.name}</span>
-                            </div>
-                          )}
-                          
-                          {task.project && (
-                            <div className="flex items-center">
-                              <span className="text-gray-400">•</span>
-                              <span className="ml-2">{task.project.name}</span>
-                            </div>
-                          )}
-                          
-                          {task.dueDate && (
-                            <div className="flex items-center">
-                              <span className="text-gray-400">•</span>
-                              <Calendar className="h-3 w-3 mr-1 ml-2" />
-                              <span>
-                                {new Date(task.dueDate).toLocaleDateString('es-ES')}
-                              </span>
-                            </div>
-                          )}
-
-                          <div className="flex items-center">
-                            <span className="text-gray-400">•</span>
-                            <span className="ml-2">
-                              {task.notes ? 'Actualizado' : 'Creado'}: {new Date(task.updatedAt || task.createdAt).toLocaleDateString('es-ES')}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+          <div className="space-y-6">
+            {/* Tareas pendientes/vencidas */}
+            {(() => {
+              const today = new Date().toISOString().split('T')[0]
+              const overdueTasks = tasks.filter(task => 
+                !task.completed && 
+                task.dueDate && 
+                task.dueDate.split('T')[0] < today
+              )
+              
+              if (overdueTasks.length > 0) {
+                return (
+                  <div className="bg-red-50 border border-red-200 rounded-lg shadow-md">
+                    <div className="p-6 border-b border-red-200">
+                      <h3 className="text-lg font-semibold text-red-800 flex items-center">
+                        <Circle className="h-5 w-5 mr-2 text-red-500" />
+                        Tareas por terminar ({overdueTasks.length} pendientes)
+                      </h3>
+                      <p className="text-sm text-red-600 mt-1">Tareas vencidas que necesitan tu atención</p>
                     </div>
-
-                    <button
-                      onClick={() => setSelectedTaskForNotes(task)}
-                      className="ml-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-                      title="Añadir/editar notas"
-                    >
-                      <FileText className="h-4 w-4" />
-                    </button>
+                    <div className="divide-y divide-red-100">
+                      {overdueTasks.map((task) => (
+                        <TaskItem key={task.id} task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                )
+              }
+              return null
+            })()}
+
+            {/* Tareas de hoy */}
+            {(() => {
+              const today = new Date().toISOString().split('T')[0]
+              const todayTasks = tasks.filter(task => 
+                !task.dueDate || 
+                task.dueDate.split('T')[0] === today ||
+                task.dueDate.split('T')[0] > today
+              )
+              
+              if (todayTasks.length > 0) {
+                return (
+                  <div className="bg-white rounded-lg shadow-md">
+                    <div className="p-6 border-b border-gray-200">
+                      <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                        <CheckCircle className="h-5 w-5 mr-2 text-green-500" />
+                        Resumen de tareas para hoy ({todayTasks.filter(task => !task.completed).length} pendientes)
+                      </h3>
+                      <p className="text-sm text-gray-600 mt-1">Tareas programadas para hoy y futuras</p>
+                    </div>
+                    <div className="divide-y divide-gray-100">
+                      {todayTasks.map((task) => (
+                        <TaskItem key={task.id} task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
+                      ))}
+                    </div>
+                  </div>
+                )
+              }
+              return null
+            })()}
           </div>
         )}
       </main>
@@ -482,6 +452,96 @@ export default function Today() {
         task={selectedTaskForNotes || { id: "", title: "", notes: "" }}
         onSave={handleSaveNotes}
       />
+    </div>
+  )
+}
+
+// Componente separado para los items de tarea
+function TaskItem({ task, toggleTask, setSelectedTaskForNotes }: {
+  task: Task,
+  toggleTask: (taskId: string, completed: boolean) => void,
+  setSelectedTaskForNotes: (task: Task) => void
+}) {
+  return (
+    <div className="p-6 hover:bg-gray-50 transition-colors">
+      <div className="flex items-start justify-between">
+        <div className="flex items-start flex-1">
+          <button
+            onClick={() => toggleTask(task.id, !task.completed)}
+            className="mr-4 mt-1 p-1"
+          >
+            {task.completed ? (
+              <CheckCircle className="h-5 w-5 text-green-500" />
+            ) : (
+              <Circle className="h-5 w-5 text-gray-400" />
+            )}
+          </button>
+          
+          <div className="flex-1 min-w-0">
+            <h4 className={`text-lg font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+              {task.title}
+            </h4>
+            
+            {task.description && (
+              <p className="text-gray-600 mt-1">{task.description}</p>
+            )}
+
+            {task.notes && (
+              <div className="mt-2 p-2 bg-amber-50 border-l-2 border-amber-200 rounded">
+                <p className="text-sm text-amber-800">
+                  <FileText className="h-3 w-3 inline mr-1" />
+                  {task.notes}
+                </p>
+              </div>
+            )}
+            
+            <div className="flex items-center mt-3 space-x-4 text-sm text-gray-500">
+              {task.company && (
+                <div className="flex items-center">
+                  <div 
+                    className="w-3 h-3 rounded-full mr-2"
+                    style={{ backgroundColor: task.company.color }}
+                  ></div>
+                  <Building className="h-3 w-3 mr-1" />
+                  <span>{task.company.name}</span>
+                </div>
+              )}
+              
+              {task.project && (
+                <div className="flex items-center">
+                  <span className="text-gray-400">•</span>
+                  <span className="ml-2">{task.project.name}</span>
+                </div>
+              )}
+              
+              {task.dueDate && (
+                <div className="flex items-center">
+                  <span className="text-gray-400">•</span>
+                  <Calendar className="h-3 w-3 mr-1 ml-2" />
+                  <span>
+                    {new Date(task.dueDate).toLocaleDateString('es-ES')}
+                  </span>
+                </div>
+              )}
+
+              <div className="flex items-center">
+                <span className="text-gray-400">•</span>
+                <span className="ml-2">
+                  {task.notes ? 'Actualizado' : 'Creado'}: {new Date(task.updatedAt || task.createdAt).toLocaleDateString('es-ES')}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setSelectedTaskForNotes(task)}
+          className="ml-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+          title="Añadir/editar notas"
+        >
+          <FileText className="h-4 w-4" />
+        </button>
+      </div>
     </div>
   )
 }
