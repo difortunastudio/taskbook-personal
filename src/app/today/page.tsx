@@ -70,13 +70,19 @@ export default function Today() {
 
   const fetchTasks = async () => {
     try {
+      console.log("🔍 Intentando cargar tareas...")
       const response = await fetch("/api/tasks")
+      console.log("📡 Respuesta del servidor:", response.status, response.statusText)
       if (response.ok) {
         const data = await response.json()
+        console.log("✅ Tareas cargadas:", data.length, "tareas")
+        console.log("📋 Datos:", data)
         setTasks(data)
+      } else {
+        console.error("❌ Error en la respuesta:", response.status, response.statusText)
       }
     } catch (error) {
-      console.error("Error fetching tasks:", error)
+      console.error("💥 Error fetching tasks:", error)
     } finally {
       setLoading(false)
     }
@@ -192,6 +198,9 @@ export default function Today() {
   if (!session) {
     return null
   }
+
+  // Debug: mostrar estado actual
+  console.log("🎯 Estado actual - Tareas:", tasks.length, "Loading:", loading, "Session:", !!session)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -385,10 +394,9 @@ export default function Today() {
             {/* Tareas pendientes/vencidas */}
             {(() => {
               const today = new Date().toISOString().split('T')[0]
+              // Temporal: mostrar todas las tareas no completadas para que veas el cambio
               const overdueTasks = tasks.filter(task => 
-                !task.completed && 
-                task.dueDate && 
-                task.dueDate.split('T')[0] < today
+                !task.completed
               )
               
               if (overdueTasks.length > 0) {
@@ -399,7 +407,7 @@ export default function Today() {
                         <Circle className="h-5 w-5 mr-2 text-red-500" />
                         Tareas por terminar ({overdueTasks.length} pendientes)
                       </h3>
-                      <p className="text-sm text-red-600 mt-1">Tareas vencidas que necesitan tu atención</p>
+                      <p className="text-sm text-red-600 mt-1">Todas las tareas pendientes que necesitan tu atención</p>
                     </div>
                     <div className="divide-y divide-red-100">
                       {overdueTasks.map((task) => (
@@ -412,13 +420,11 @@ export default function Today() {
               return null
             })()}
 
-            {/* Tareas de hoy */}
+            {/* Tareas completadas */}
             {(() => {
               const today = new Date().toISOString().split('T')[0]
               const todayTasks = tasks.filter(task => 
-                !task.dueDate || 
-                task.dueDate.split('T')[0] === today ||
-                task.dueDate.split('T')[0] > today
+                task.completed
               )
               
               if (todayTasks.length > 0) {
@@ -427,9 +433,9 @@ export default function Today() {
                     <div className="p-6 border-b border-gray-200">
                       <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                         <CheckCircle className="h-5 w-5 mr-2 text-green-500" />
-                        Resumen de tareas para hoy ({todayTasks.filter(task => !task.completed).length} pendientes)
+                        Tareas completadas ({todayTasks.length} completadas)
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">Tareas programadas para hoy y futuras</p>
+                      <p className="text-sm text-gray-600 mt-1">Tareas que ya has terminado</p>
                     </div>
                     <div className="divide-y divide-gray-100">
                       {todayTasks.map((task) => (
