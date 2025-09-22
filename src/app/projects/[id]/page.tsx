@@ -129,52 +129,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ id: string
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center cursor-pointer" onClick={() => router.push("/home")}>
-              <BookOpen className="h-8 w-8 text-blue-600" />
-              <h1 className="ml-2 text-2xl font-bold text-gray-900">TaskBook</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button 
-                onClick={() => router.push("/home")}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Inicio
-              </button>
-              <button 
-                onClick={() => router.push("/today")}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Mi Día
-              </button>
-              <button 
-                onClick={() => router.push("/companies")}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Empresas
-              </button>
-              <button 
-                onClick={() => router.push("/projects")}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Proyectos
-              </button>
-              <span className="text-sm text-gray-700">Hola, {session.user.name || session.user.email}</span>
-              <button 
-                onClick={() => router.push("/api/auth/signout")}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Cerrar sesión
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
+      {/* Sidebar y contenido principal, sin header superior */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back button */}
         <button 

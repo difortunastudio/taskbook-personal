@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import DifortunaLogo from "@/components/DifortunaLogo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,19 +54,32 @@ export default function RootLayout({
         <meta name="msapplication-config" content="/browserconfig.xml" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex`}
       >
         <Providers>
-          <div className="flex-1">
-            {children}
-          </div>
-          <footer className="bg-gray-50 border-t border-gray-200 py-4 px-6">
-            <div className="max-w-7xl mx-auto text-center">
-              <p className="text-sm text-gray-600">
-                Creada con ❤️ por <span className="font-medium text-gray-800">Fiorella Gallo Di Fortuna</span>
-              </p>
+          <aside className="w-56 min-h-screen bg-gray-100 border-r border-gray-200 flex flex-col py-8 px-4">
+            <div className="mb-8 text-center flex items-center justify-center gap-2">
+              <a href="/home" className="flex items-center gap-2">
+                <DifortunaLogo className="text-blue-600" size={32} variant="simple" />
+                <span className="text-2xl font-bold text-gray-900">TaskBook</span>
+              </a>
             </div>
-          </footer>
+            <nav className="flex-1">
+              <ul className="flex flex-col gap-4">
+                <li><a href="/home" className="hover:underline text-gray-900">Inicio</a></li>
+                <li><a href="/today" className="hover:underline text-gray-900">Tareas</a></li>
+                <li><a href="/projects" className="hover:underline text-gray-900">Proyectos</a></li>
+                <li><a href="/companies" className="hover:underline text-gray-900">Empresas</a></li>
+                <li><a href="/ideas" className="hover:underline font-semibold text-yellow-600 bg-yellow-50 rounded px-2 py-1">Eureka</a></li>
+              </ul>
+            </nav>
+            <footer className="mt-8 text-xs text-gray-500 text-center">
+              Creada con ❤️ por <span className="font-medium text-gray-900">Fiorella Gallo Di Fortuna</span>
+            </footer>
+          </aside>
+          <main className="flex-1 flex flex-col min-h-screen">
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

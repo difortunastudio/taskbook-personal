@@ -173,49 +173,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center cursor-pointer" onClick={() => router.push("/home")}>
-              <DifortunaLogo className="text-blue-600" size={32} variant="simple" />
-              <h1 className="ml-3 text-2xl font-bold text-gray-900">TaskBook</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-blue-600 px-3 py-1 bg-blue-50 rounded-full">
-                Inicio
-              </span>
-              <button 
-                onClick={() => router.push("/today")}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Mi Día
-              </button>
-              <button 
-                onClick={() => router.push("/companies")}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Empresas
-              </button>
-              <button 
-                onClick={() => router.push("/projects")}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Proyectos
-              </button>
-              <span className="text-sm text-gray-700">Hola, {session.user.name || session.user.email}</span>
-              <button 
-                onClick={() => router.push("/api/auth/signout")}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Cerrar sesión
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
+      {/* Sidebar y contenido principal, sin header superior */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Mi Cuaderno Virtual</h2>
@@ -313,6 +271,19 @@ export default function Home() {
               <div className="ml-4">
                 <h3 className="text-lg font-semibold text-gray-900">Nueva Empresa</h3>
                 <p className="text-gray-600">Agregar empresa</p>
+              </div>
+            </div>
+          </div>
+
+          <div 
+            onClick={() => router.push("/ideas")}
+            className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow"
+          >
+            <div className="flex items-center">
+              <BookOpen className="h-12 w-12 text-yellow-600" />
+              <div className="ml-4">
+                <h3 className="text-lg font-semibold text-gray-900">Eureka</h3>
+                <p className="text-gray-600">Tus ideas y notas rápidas</p>
               </div>
             </div>
           </div>
