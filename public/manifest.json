@@ -2,7 +2,7 @@
   "name": "TaskBook - Cuaderno Virtual",
   "short_name": "TaskBook",
   "description": "Tu cuaderno virtual personalizado para gestionar tareas y proyectos",
-  "start_url": "/",
+  "start_url": "/home",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3B82F6",

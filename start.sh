@@ -30,5 +30,15 @@ echo ""
 echo "Para detener el servidor, presiona Ctrl+C"
 echo ""
 
+# Función para abrir el navegador después de que el servidor esté listo
+open_browser() {
+    sleep 3  # Esperar 3 segundos para que el servidor inicie
+    echo "🚀 Abriendo TaskBook en tu navegador..."
+    open "http://localhost:3000/home"
+}
+
+# Ejecutar la función en segundo plano
+open_browser &
+
 # Iniciar el servidor
 npm run dev
