@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import DifortunaLogo from "@/components/DifortunaLogo";
+import UserEmailSidebar from "@/components/UserEmailSidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -76,6 +77,7 @@ export default function RootLayout({
             <footer className="mt-8 text-xs text-gray-500 text-center">
               Creada con ❤️ por <span className="font-medium text-gray-900">Fiorella Gallo Di Fortuna</span>
             </footer>
+            <UserEmailSidebar />
           </aside>
           <main className="flex-1 flex flex-col min-h-screen">
             {children}
