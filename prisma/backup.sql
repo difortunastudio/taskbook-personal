@@ -24,11 +24,11 @@ CREATE TABLE IF NOT EXISTS "companies" (
     "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "companies_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-INSERT INTO companies VALUES('cmf6z8dnr0002xsnb6kygd19i','Rico Vidarte SL','rico.vidarte@gmail.com','','','B67326033','LT66 3250 0527 3756 2027','','Cuenta de banco REVOLUT €\nBIC : REVOLT21 (cuenta en euros)\n','#3B82F6','cmf6z83x80000xsnb2cy0n5fh',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
-INSERT INTO companies VALUES('cmf6zdb6v0006xsnbxj7f3pjr','Herokid SL','fiorella@herokidstudio.es','+34-933209090','Calle Joan d''Austria 95, 2º 3ª 08018 Barcelona España','B65374639','','','Instagram coworking - herokidcoworking@gmail.com Pass/ 2010@HerokidCoworking Meta\nR- 072010','#F59E0B','cmf6z83x80000xsnb2cy0n5fh',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
-INSERT INTO companies VALUES('cmf6zr6zn0003xsgfxq78gvpc','Fiorella Gallo Di Fortuna','difortunastudio@gmail.com','+34-665401359','Calle Joan d''Austria 95, 2º 3ª 08018 Barcelona','X4318310Z','','','','#84CC16','cmf6z83x80000xsnb2cy0n5fh',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
-INSERT INTO companies VALUES('cmfaw7btp0003xst2d7d2v7fq','Fliia SL','','','Calle Joan d''Austria 95, 2º 3, 08018 Barcelona España','','','','','#06B6D4','cmf6z83x80000xsnb2cy0n5fh',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
-INSERT INTO companies VALUES('cmfdvtcbp0009xsl2jbjwn3r5','FGD VII Group S.L.','difortunastudio@gmail.com','+34-665401359','Calle Joan d''Austria 95, 2º 3ª','','','','Crearé esta empresa.. despues de crear Fliia SL, y traspasaré Fliia a la holding FGD VII Group SL','#EC4899','cmf6z83x80000xsnb2cy0n5fh',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
+INSERT INTO companies VALUES('cmf6z8dnr0002xsnb6kygd19i','Rico Vidarte SL','rico.vidarte@gmail.com','','','B67326033','LT66 3250 0527 3756 2027','','Cuenta de banco REVOLUT €\nBIC : REVOLT21 (cuenta en euros)\n','#3B82F6','cmf6z83x80000xsnb2cy0n5fh',CURRENT_TIMESTAMP);
+INSERT INTO companies VALUES('cmf6zdb6v0006xsnbxj7f3pjr','Herokid SL','fiorella@herokidstudio.es','+34-933209090','Calle Joan d''Austria 95, 2º 3ª 08018 Barcelona España','B65374639','','','Instagram coworking - herokidcoworking@gmail.com Pass/ 2010@HerokidCoworking Meta\nR- 072010','#F59E0B','cmf6z83x80000xsnb2cy0n5fh',CURRENT_TIMESTAMP);
+INSERT INTO companies VALUES('cmf6zr6zn0003xsgfxq78gvpc','Fiorella Gallo Di Fortuna','difortunastudio@gmail.com','+34-665401359','Calle Joan d''Austria 95, 2º 3ª 08018 Barcelona','X4318310Z','','','','#84CC16','cmf6z83x80000xsnb2cy0n5fh',CURRENT_TIMESTAMP);
+INSERT INTO companies VALUES('cmfaw7btp0003xst2d7d2v7fq','Fliia SL','','','Calle Joan d''Austria 95, 2º 3, 08018 Barcelona España','','','','','#06B6D4','cmf6z83x80000xsnb2cy0n5fh',CURRENT_TIMESTAMP);
+INSERT INTO companies VALUES('cmfdvtcbp0009xsl2jbjwn3r5','FGD VII Group S.L.','difortunastudio@gmail.com','+34-665401359','Calle Joan d''Austria 95, 2º 3ª','','','','Crearé esta empresa.. despues de crear Fliia SL, y traspasaré Fliia a la holding FGD VII Group SL','#EC4899','cmf6z83x80000xsnb2cy0n5fh',CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS "projects" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
