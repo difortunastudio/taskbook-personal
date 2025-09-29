@@ -351,25 +351,36 @@ export default function Today() {
           <div className="space-y-6">
             {/* Tareas pendientes/vencidas */}
             {(() => {
-              const today = new Date().toISOString().split('T')[0]
-              // Temporal: mostrar todas las tareas no completadas para que veas el cambio
-              const overdueTasks = tasks.filter(task => 
-                !task.completed
-              )
-              
-              if (overdueTasks.length > 0) {
+              // Mostrar todas las tareas no completadas, agrupadas por empresa y proyecto
+              const pendingTasks = tasks.filter(task => !task.completed)
+              if (pendingTasks.length > 0) {
+                // Agrupar por empresa y proyecto
+                const grouped = {} as Record<string, Task[]>
+                pendingTasks.forEach(task => {
+                  let key = "Sin empresa/proyecto"
+                  if (task.company && task.project) key = `${task.company.name} / ${task.project.name}`
+                  else if (task.company) key = task.company.name
+                  else if (task.project) key = task.project.name
+                  if (!grouped[key]) grouped[key] = []
+                  grouped[key].push(task)
+                })
                 return (
-                  <div className="bg-red-50 border border-red-200 rounded-lg shadow-md">
-                    <div className="p-6 border-b border-red-200">
-                      <h3 className="text-lg font-semibold text-red-800 flex items-center">
-                        <Circle className="h-5 w-5 mr-2 text-red-500" />
-                        Tareas por terminar ({overdueTasks.length} pendientes)
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg shadow-md">
+                    <div className="p-6 border-b border-yellow-200">
+                      <h3 className="text-lg font-semibold text-yellow-800 flex items-center">
+                        <Circle className="h-5 w-5 mr-2 text-yellow-500" />
+                        Tareas pendientes ({pendingTasks.length})
                       </h3>
-                      <p className="text-sm text-red-600 mt-1">Todas las tareas pendientes que necesitan tu atención</p>
+                      <p className="text-sm text-yellow-600 mt-1">Resumen de todas tus tareas pendientes agrupadas por empresa/proyecto</p>
                     </div>
-                    <div className="divide-y divide-red-100">
-                      {overdueTasks.map((task) => (
-                        <TaskItem key={task.id} task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
+                    <div className="divide-y divide-yellow-100">
+                      {Object.entries(grouped).map(([group, groupTasks]) => (
+                        <div key={group} className="p-4">
+                          <div className="font-semibold text-yellow-700 mb-2">{group}</div>
+                          {groupTasks.map(task => (
+                            <TaskItem key={task.id} task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
+                          ))}
+                        </div>
                       ))}
                     </div>
                   </div>
