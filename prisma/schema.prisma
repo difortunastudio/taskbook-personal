@@ -8,44 +8,41 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  password  String
-  name      String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  companies Company[]
-  files     File[]
-  links     Link[]
-  projects  Project[]
-  tasks     Task[]
+  id              String           @id @default(cuid())
+  email           String           @unique
+  password        String
+  name            String?
+  createdAt       DateTime         @default(now()) @db.Timestamp(6)
+  updatedAt       DateTime         @updatedAt @db.Timestamp(6)
+  companies       Company[]
+  files           File[]
+  links           Link[]
   businessRecords BusinessRecord[]
-  tags      Tag[]
+  projects        Project[]
+  tasks           Task[]
 
   @@map("users")
 }
 
 model Company {
-  id            String    @id @default(cuid())
-  name          String
-  email         String?
-  phone         String?
-  address       String?
-  cif           String?
-  accountNumber String?
-  password      String?
-  notes         String?
-  color         String?   @default("#3B82F6")
-  userId        String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  files         File[]
-  links         Link[]
-  projects      Project[]
-  tasks         Task[]
+  id              String           @id @default(cuid())
+  name            String
+  email           String?
+  phone           String?
+  address         String?
+  cif             String?
+  accountNumber   String?
+  password        String?
+  notes           String?
+  color           String?          @default("#3B82F6")
+  userId          String
+  updatedAt       DateTime         @updatedAt @db.Timestamp(6)
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  files           File[]
+  links           Link[]
   businessRecords BusinessRecord[]
-  tags          CompanyTag[]
+  projects        Project[]
+  tasks           Task[]
 
   @@map("companies")
 }
@@ -56,12 +53,12 @@ model Project {
   description String?
   companyId   String
   userId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime @updatedAt @db.Timestamp(6)
   files       File[]
   links       Link[]
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   tasks       Task[]
 
   @@map("projects")
@@ -71,18 +68,17 @@ model Task {
   id          String    @id @default(cuid())
   title       String
   description String?
-  notes       String?
   completed   Boolean   @default(false)
-  dueDate     DateTime?
+  dueDate     DateTime? @db.Timestamp(6)
   companyId   String?
   projectId   String?
   userId      String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  project     Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime  @updatedAt @db.Timestamp(6)
+  notes       String?
   company     Company?  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  tags        TaskTag[]
+  project     Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("tasks")
 }
@@ -97,10 +93,10 @@ model File {
   companyId    String?
   projectId    String?
   userId       String
-  createdAt    DateTime @default(now())
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  project      Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now()) @db.Timestamp(6)
   company      Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  project      Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("files")
 }
@@ -114,89 +110,29 @@ model Link {
   companyId   String?
   projectId   String?
   userId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime @updatedAt @db.Timestamp(6)
   company     Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("links")
 }
 
 model BusinessRecord {
   id          String   @id @default(cuid())
-  date        DateTime
+  date        DateTime @db.Timestamp(6)
   title       String
   description String
-  type        String   // "contable", "decision", "nota"
-  reference   String?  // Referencia opcional
-  
-  // Relaciones
+  type        String
+  reference   String?
+  tags        String?
   companyId   String
-  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   userId      String
+  createdAt   DateTime @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime @updatedAt @db.Timestamp(6)
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tags        BusinessRecordTag[]
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
   @@map("memoria_contable")
-}
-
-model Tag {
-  id          String   @id @default(cuid())
-  name        String
-  color       String   @default("#3B82F6")
-  userId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tasks       TaskTag[]
-  companies   CompanyTag[]
-  businessRecords BusinessRecordTag[]
-
-  @@unique([name, userId])
-  @@map("tags")
-}
-
-model TaskTag {
-  id     String @id @default(cuid())
-  taskId String
-  tagId  String
-  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@unique([taskId, tagId])
-  @@map("task_tags")
-}
-
-model CompanyTag {
-  id        String  @id @default(cuid())
-  companyId String
-  tagId     String
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@unique([companyId, tagId])
-  @@map("company_tags")
-}
-
-model BusinessRecordTag {
-  id               String         @id @default(cuid())
-  businessRecordId String
-  tagId            String
-  businessRecord   BusinessRecord @relation(fields: [businessRecordId], references: [id], onDelete: Cascade)
-  tag              Tag            @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@unique([businessRecordId, tagId])
-  @@map("business_record_tags")
-}
-
-model Idea {
-  id        String   @id @default(cuid())
-  content   String
-  tags      String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

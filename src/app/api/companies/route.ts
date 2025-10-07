@@ -10,13 +10,9 @@ export async function GET() {
       return NextResponse.json({ message: "No autorizado" }, { status: 401 })
     }
 
-    console.log("GET Companies - Session:", session) // Debug
-    console.log("GET Companies - User ID:", session.user?.id) // Debug
-
     const companies = await prisma.company.findMany({
       where: { userId: session.user.id },
       include: {
-        projects: true,
         _count: {
           select: {
             tasks: true,

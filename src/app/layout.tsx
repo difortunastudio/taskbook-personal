@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 import { Providers } from "./providers";
 import DifortunaLogo from "@/components/DifortunaLogo";
@@ -69,8 +70,8 @@ export default function RootLayout({
               <ul className="flex flex-col gap-4">
                 <li><a href="/home" className="hover:underline text-gray-900">Inicio</a></li>
                 <li><a href="/today" className="hover:underline text-gray-900">Tareas</a></li>
-                <li><a href="/projects" className="hover:underline text-gray-900">Proyectos</a></li>
-                <li><a href="/companies" className="hover:underline text-gray-900">Empresas</a></li>
+                <li><Link href="/projects" className="hover:underline text-gray-900">Proyectos</Link></li>
+                <li><Link href="/companies" className="hover:underline text-gray-900">Empresas</Link></li>
                 <li><a href="/ideas" className="hover:underline font-semibold text-yellow-600 bg-yellow-50 rounded px-2 py-1">Eureka</a></li>
               </ul>
             </nav>
