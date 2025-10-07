@@ -1,0 +1,1 @@
+INSERT INTO users (id, email, password, name, "createdAt", "updatedAt") VALUES ('new_user_001', 'fiorella@test.com', '$2b$12$sQJv42gdiQEpAg5ofoN1FOjCvHO/eQLTI7qrVbjgldqXbGwenShA6', 'Fiorella Test', now(), now());
