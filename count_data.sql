@@ -1,0 +1,1 @@
+SELECT 'companies' as table_name, COUNT(*) as count FROM companies WHERE "userId" = 'cmf6z83x80000xsnb2cy0n5fh' UNION ALL SELECT 'projects', COUNT(*) FROM projects WHERE "userId" = 'cmf6z83x80000xsnb2cy0n5fh' UNION ALL SELECT 'tasks', COUNT(*) FROM tasks WHERE "userId" = 'cmf6z83x80000xsnb2cy0n5fh';

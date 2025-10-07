@@ -13,6 +13,22 @@ export async function GET() {
     console.log("GET Companies - Session:", session) // Debug
     console.log("GET Companies - User ID:", session.user?.id) // Debug
 
+    // Temporal: obtener todas las empresas para debug
+    const allCompanies = await prisma.company.findMany({
+      include: {
+        projects: true,
+        _count: {
+          select: {
+            tasks: true,
+            projects: true
+          }
+        }
+      },
+      orderBy: { name: "asc" }
+    })
+    console.log("All companies found:", allCompanies.length)
+    console.log("Companies userIds:", allCompanies.map(c => ({ name: c.name, userId: c.userId })))
+
     const companies = await prisma.company.findMany({
       where: { userId: session.user.id },
       include: {
