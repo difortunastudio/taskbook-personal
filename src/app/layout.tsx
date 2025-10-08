@@ -126,6 +126,11 @@ export default function RootLayout({
                   <span className="text-base">🗑️</span>
                 </Link>
               </li>
+              <li>
+                <Link href="/trash" className="flex flex-col items-center py-2 text-gray-500 hover:text-red-600">
+                  <span className="text-xs">🗑️</span>
+                </Link>
+              </li>
             </ul>
           </nav>
         </Providers>
