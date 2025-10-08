@@ -20,9 +20,19 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
+<<<<<<< HEAD
     const showDeleted = searchParams.get('deleted') === 'true'
 
     // Obtener tareas del usuario (activas o eliminadas según el parámetro)
+=======
+    const filter = searchParams.get('filter') || 'today'
+    const showDeleted = searchParams.get('deleted') === 'true'
+
+    let whereClause: TaskWhereClause = {
+      userId: session.user.id,
+      deleted: showDeleted ? true : false
+    }
+>>>>>>> 9db4b72 (feat: implement soft delete and restore functionality for tasks)
 
     // SOLUCIÓN DEFINITIVA: Si pide eliminadas, filtra por deleted=true. Si no, muestra TODAS.
     const whereCondition = showDeleted 

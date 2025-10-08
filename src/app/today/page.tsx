@@ -612,6 +612,7 @@ function TodayContent() {
           onSave={handleEditTask}
         />
       )}
+<<<<<<< HEAD
 
       {/* Floating Tareas Button (FAB) for mobile */}
       <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50 md:hidden">
@@ -623,6 +624,8 @@ function TodayContent() {
           Tareas
         </button>
       </div>
+=======
+>>>>>>> 9db4b72 (feat: implement soft delete and restore functionality for tasks)
     </div>
   )
 }
