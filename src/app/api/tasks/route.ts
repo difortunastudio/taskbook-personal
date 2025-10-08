@@ -20,44 +20,16 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const filter = searchParams.get('filter') || 'today'
     const showDeleted = searchParams.get('deleted') === 'true'
 
-    let whereClause: TaskWhereClause = {
-      userId: session.user.id,
-      deleted: showDeleted ? true : false
-    }
+    console.log('🔍 API Tasks GET:', { showDeleted, userId: session.user.id })
 
-    if (filter === 'today') {
-      // Obtener tareas de hoy
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      const tomorrow = new Date(today)
-      tomorrow.setDate(tomorrow.getDate() + 1)
-
-      whereClause = {
-        ...whereClause,
-        OR: [
-          {
-            dueDate: {
-              gte: today,
-              lt: tomorrow
-            }
-          },
-          {
-            dueDate: null,
-            createdAt: {
-              gte: today,
-              lt: tomorrow
-            }
-          }
-        ]
-      }
-    }
-    // Si filter !== 'today', obtener todas las tareas
-
+    // Consulta simplificada
     const tasks = await prisma.task.findMany({
-      where: whereClause,
+      where: {
+        userId: session.user.id,
+        deleted: showDeleted // true para papelera, false para tareas normales
+      },
       include: {
         company: {
           select: {
@@ -79,6 +51,7 @@ export async function GET(request: NextRequest) {
       ]
     })
 
+    console.log('✅ Tareas encontradas:', tasks.length)
     return NextResponse.json(tasks)
   } catch (error) {
     console.error("Error obteniendo tareas:", error)
