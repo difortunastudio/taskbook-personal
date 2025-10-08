@@ -73,7 +73,7 @@ function TodayContent() {
   const fetchTasks = async () => {
     try {
       console.log("🔍 Intentando cargar tareas...")
-      const response = await fetch("/api/tasks")
+      const response = await fetch("/api/tasks?filter=all")
       console.log("📡 Respuesta del servidor:", response.status, response.statusText)
       if (response.ok) {
         const data = await response.json()
@@ -364,57 +364,53 @@ function TodayContent() {
               console.log("⏳ Pendientes:", pendingTasks)
               
               if (pendingTasks.length > 0) {
-                // Agrupar por empresa y proyecto
+                // Agrupar por empresa y proyecto con mejor formato
                 const grouped = {} as Record<string, Task[]>
                 pendingTasks.forEach(task => {
-                  let key = "Sin empresa/proyecto"
-                  if (task.company && task.project) key = `${task.company.name} / ${task.project.name}`
-                  else if (task.company) key = task.company.name
-                  else if (task.project) key = task.project.name
+                  let key = "📝 Tareas personales"
+                  if (task.company && task.project) {
+                    key = `🏢 ${task.company.name} → 📁 ${task.project.name}`
+                  } else if (task.company) {
+                    key = `🏢 ${task.company.name}`
+                  } else if (task.project) {
+                    key = `📁 ${task.project.name}`
+                  }
                   if (!grouped[key]) grouped[key] = []
                   grouped[key].push(task)
                 })
+
+                // Ordenar grupos alfabéticamente y tareas por fecha de creación (más recientes primero)
+                const sortedGroups = Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b))
+                sortedGroups.forEach(([, groupTasks]) => {
+                  groupTasks.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                })
                 return (
-                  <div className={`${
-                    filterType === 'pending' 
-                      ? 'bg-white border border-gray-200' 
-                      : 'bg-yellow-50 border border-yellow-200'
-                  } rounded-lg shadow-md`}>
-                    <div className={`p-6 border-b ${
-                      filterType === 'pending' 
-                        ? 'border-gray-200' 
-                        : 'border-yellow-200'
-                    }`}>
-                      <h3 className={`text-lg font-semibold flex items-center ${
-                        filterType === 'pending' 
-                          ? 'text-gray-900' 
-                          : 'text-yellow-800'
-                      }`}>
-                        <Circle className={`h-5 w-5 mr-2 ${
-                          filterType === 'pending' 
-                            ? 'text-blue-500' 
-                            : 'text-yellow-500'
-                        }`} />
-                        {filterType === 'pending' ? 'Todas las Tareas Pendientes' : 'Tareas pendientes'} ({pendingTasks.length})
+                  <div className="bg-white border border-gray-200 rounded-lg shadow-md">
+                    <div className="p-6 border-b border-gray-200">
+                      <h3 className="text-lg font-semibold flex items-center text-gray-900">
+                        <Circle className="h-5 w-5 mr-2 text-blue-500" />
+                        Todas las Tareas Pendientes ({pendingTasks.length})
                       </h3>
-                      <p className={`text-sm mt-1 ${
-                        filterType === 'pending' 
-                          ? 'text-gray-600' 
-                          : 'text-yellow-600'
-                      }`}>
-                        {filterType === 'pending' 
-                          ? 'Aquí tienes todas tus tareas pendientes organizadas por empresa y proyecto'
-                          : 'Resumen de todas tus tareas pendientes agrupadas por empresa/proyecto'
-                        }
+                      <p className="text-sm mt-1 text-gray-600">
+                        Aquí tienes todas tus tareas pendientes organizadas por empresa y proyecto
                       </p>
                     </div>
-                    <div className="divide-y divide-yellow-100">
-                      {Object.entries(grouped).map(([group, groupTasks]) => (
-                        <div key={group} className="p-4">
-                          <div className="font-semibold text-yellow-700 mb-2">{group}</div>
-                          {groupTasks.map(task => (
-                            <TaskItem key={task.id} task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
-                          ))}
+                    <div className="divide-y divide-gray-100">
+                      {sortedGroups.map(([group, groupTasks]) => (
+                        <div key={group} className="p-6">
+                          <div className="flex items-center mb-4">
+                            <h4 className="font-semibold text-gray-800 text-base">{group}</h4>
+                            <span className="ml-2 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                              {groupTasks.length}
+                            </span>
+                          </div>
+                          <div className="space-y-3">
+                            {groupTasks.map(task => (
+                              <div key={task.id} className="pl-4 border-l-2 border-gray-200">
+                                <TaskItem task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -428,21 +424,18 @@ function TodayContent() {
                   <div className="text-gray-400 mb-4">
                     <CheckCircle className="h-16 w-16 mx-auto" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {filterType === 'pending' ? '¡No tienes tareas pendientes!' : 'No hay tareas pendientes'}
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    ¡Excelente! No tienes tareas pendientes
                   </h3>
-                  <p className="text-gray-600 mb-4">
-                    {filterType === 'pending' 
-                      ? 'Todas las tareas están completadas. ¡Buen trabajo!' 
-                      : 'Crea una nueva tarea para empezar a organizarte.'
-                    }
+                  <p className="text-gray-600 mb-6">
+                    Has completado todas tus tareas. ¿Quieres crear una nueva?
                   </p>
                   <button 
                     onClick={() => setShowTaskForm(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center mx-auto"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg inline-flex items-center"
                   >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Crear primera tarea
+                    <Plus className="h-5 w-5 mr-2" />
+                    Nueva tarea
                   </button>
                 </div>
               )
