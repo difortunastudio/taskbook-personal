@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 
 interface TaskWhereClause {
   userId: string
+  deleted?: boolean
   OR?: Array<{
     dueDate?: { gte?: Date; lt?: Date } | null
     createdAt?: { gte?: Date; lt?: Date }
@@ -20,9 +21,11 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const filter = searchParams.get('filter') || 'today'
+    const showDeleted = searchParams.get('deleted') === 'true'
 
     let whereClause: TaskWhereClause = {
-      userId: session.user.id
+      userId: session.user.id,
+      deleted: showDeleted ? true : false
     }
 
     if (filter === 'today') {

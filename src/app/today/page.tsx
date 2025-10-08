@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState, Suspense } from "react"
-import { BookOpen, Plus, Calendar, CheckCircle, Circle, Building, FileText, Edit3 } from "lucide-react"
+import { BookOpen, Plus, Calendar, CheckCircle, Circle, Building, FileText, Edit3, Trash2 } from "lucide-react"
 import DifortunaLogo from "@/components/DifortunaLogo"
 import TaskNotesModal from "@/components/TaskNotesModal"
 
@@ -49,6 +49,7 @@ function TodayContent() {
   const [loading, setLoading] = useState(true)
   const [showTaskForm, setShowTaskForm] = useState(false)
   const [selectedTaskForNotes, setSelectedTaskForNotes] = useState<Task | null>(null)
+  const [selectedTaskForEdit, setSelectedTaskForEdit] = useState<Task | null>(null)
   const [viewFilter, setViewFilter] = useState<'all' | 'pending' | 'completed'>('all')
   const [newTask, setNewTask] = useState({
     title: "",
@@ -192,6 +193,46 @@ function TodayContent() {
       }
     } catch (error) {
       console.error("Error creating task:", error)
+    }
+  }
+
+  const handleEditTask = async (taskId: string, taskData: { title: string, description?: string, companyId?: string, projectId?: string, dueDate?: string }) => {
+    try {
+      const response = await fetch(`/api/tasks/${taskId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(taskData)
+      })
+
+      if (response.ok) {
+        const updatedTask = await response.json()
+        setTasks(tasks.map(task => 
+          task.id === taskId ? updatedTask : task
+        ))
+        setSelectedTaskForEdit(null)
+      }
+    } catch (error) {
+      console.error("Error editing task:", error)
+    }
+  }
+
+  const handleDeleteTask = async (taskId: string) => {
+    if (!confirm('¿Estás seguro de que quieres mover esta tarea a la papelera?')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/tasks/${taskId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ permanent: false })
+      })
+
+      if (response.ok) {
+        setTasks(tasks.filter(task => task.id !== taskId))
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error)
     }
   }
 
@@ -449,7 +490,13 @@ function TodayContent() {
                           <div className="space-y-3">
                             {groupTasks.map(task => (
                               <div key={task.id} className="pl-4 border-l-2 border-gray-200">
-                                <TaskItem task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
+                                <TaskItem 
+                                  task={task} 
+                                  toggleTask={toggleTask} 
+                                  setSelectedTaskForNotes={setSelectedTaskForNotes}
+                                  setSelectedTaskForEdit={setSelectedTaskForEdit}
+                                  handleDeleteTask={handleDeleteTask}
+                                />
                               </div>
                             ))}
                           </div>
@@ -503,7 +550,13 @@ function TodayContent() {
                     <div className="divide-y divide-green-100">
                       {completedTasks.map((task) => (
                         <div key={task.id} className="p-4">
-                          <TaskItem task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
+                          <TaskItem 
+                            task={task} 
+                            toggleTask={toggleTask} 
+                            setSelectedTaskForNotes={setSelectedTaskForNotes}
+                            setSelectedTaskForEdit={setSelectedTaskForEdit}
+                            handleDeleteTask={handleDeleteTask}
+                          />
                         </div>
                       ))}
                     </div>
@@ -544,15 +597,29 @@ function TodayContent() {
         task={selectedTaskForNotes || { id: "", title: "", notes: "" }}
         onSave={handleSaveNotes}
       />
+
+      {/* Task Edit Modal */}
+      {selectedTaskForEdit && (
+        <TaskEditModal
+          isOpen={selectedTaskForEdit !== null}
+          onClose={() => setSelectedTaskForEdit(null)}
+          task={selectedTaskForEdit}
+          companies={companies}
+          projects={projects}
+          onSave={handleEditTask}
+        />
+      )}
     </div>
   )
 }
 
 // Componente separado para los items de tarea
-function TaskItem({ task, toggleTask, setSelectedTaskForNotes }: {
+function TaskItem({ task, toggleTask, setSelectedTaskForNotes, setSelectedTaskForEdit, handleDeleteTask }: {
   task: Task,
   toggleTask: (taskId: string, completed: boolean) => void,
-  setSelectedTaskForNotes: (task: Task) => void
+  setSelectedTaskForNotes: (task: Task) => void,
+  setSelectedTaskForEdit: (task: Task) => void,
+  handleDeleteTask: (taskId: string) => void
 }) {
   return (
     <div className="p-4 hover:bg-gray-50 transition-colors">
@@ -626,13 +693,177 @@ function TaskItem({ task, toggleTask, setSelectedTaskForNotes }: {
           </div>
         </div>
 
-        <button
-          onClick={() => setSelectedTaskForNotes(task)}
-          className="ml-3 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-          title="Añadir/editar notas"
-        >
-          <FileText className="h-4 w-4" />
-        </button>
+        <div className="flex items-center">        <div className="flex items-center space-x-1 ml-3">
+          <button
+            onClick={() => setSelectedTaskForEdit(task)}
+            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            title="Editar tarea"
+          >
+            <Edit3 className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setSelectedTaskForNotes(task)}
+            className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+            title="Añadir/editar notas"
+          >
+            <FileText className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => handleDeleteTask(task.id)}
+            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            title="Eliminar tarea"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Modal para editar tareas
+function TaskEditModal({ isOpen, onClose, task, companies, projects, onSave }: {
+  isOpen: boolean,
+  onClose: () => void,
+  task: Task,
+  companies: Company[],
+  projects: Project[],
+  onSave: (taskId: string, taskData: { title: string, description?: string, companyId?: string, projectId?: string, dueDate?: string }) => void
+}) {
+  const [editData, setEditData] = useState({
+    title: task.title,
+    description: task.description || '',
+    companyId: task.company?.id || '',
+    projectId: task.project?.id || '',
+    dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''
+  })
+
+  const filteredProjects = projects.filter(project => 
+    !editData.companyId || project.company.id === editData.companyId
+  )
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editData.title.trim()) return
+    
+    onSave(task.id, {
+      title: editData.title.trim(),
+      description: editData.description.trim() || undefined,
+      companyId: editData.companyId || undefined,
+      projectId: editData.projectId || undefined,
+      dueDate: editData.dueDate || undefined
+    })
+  }
+
+  if (!isOpen) return null
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Editar Tarea</h3>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 rounded-lg p-1"
+            >
+              ✕
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Título *
+              </label>
+              <input
+                type="text"
+                value={editData.title}
+                onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Descripción
+              </label>
+              <textarea
+                value={editData.description}
+                onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows={3}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Empresa
+              </label>
+              <select
+                value={editData.companyId}
+                onChange={(e) => setEditData({ ...editData, companyId: e.target.value, projectId: '' })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Sin empresa</option>
+                {companies.map((company) => (
+                  <option key={company.id} value={company.id}>
+                    {company.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Proyecto
+              </label>
+              <select
+                value={editData.projectId}
+                onChange={(e) => setEditData({ ...editData, projectId: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                disabled={!editData.companyId}
+              >
+                <option value="">Sin proyecto</option>
+                {filteredProjects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Fecha de vencimiento
+              </label>
+              <input
+                type="date"
+                value={editData.dueDate}
+                onChange={(e) => setEditData({ ...editData, dueDate: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3 pt-4">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              >
+                Guardar Cambios
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   )
