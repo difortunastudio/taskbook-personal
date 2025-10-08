@@ -99,31 +99,31 @@ export default function RootLayout({
           </div>
 
           {/* Navegación inferior - solo visible en móvil */}
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 px-4 py-2">
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 px-4 py-3">
             <ul className="flex justify-around items-center">
               <li>
-                <a href="/home" className="flex flex-col items-center py-2 text-gray-900 hover:text-blue-600">
-                  <span className="text-xs">Inicio</span>
+                <a href="/home" className="flex flex-col items-center py-3 text-gray-900 hover:text-blue-600">
+                  <span className="text-base">Inicio</span>
                 </a>
               </li>
               <li>
-                <a href="/today" className="flex flex-col items-center py-2 text-gray-900 hover:text-blue-600">
-                  <span className="text-xs">Tareas</span>
+                <a href="/today" className="flex flex-col items-center py-3 text-gray-900 hover:text-blue-600">
+                  <span className="text-base">Tareas</span>
                 </a>
               </li>
               <li>
-                <Link href="/projects" className="flex flex-col items-center py-2 text-gray-900 hover:text-blue-600">
-                  <span className="text-xs">Proyectos</span>
+                <Link href="/projects" className="flex flex-col items-center py-3 text-gray-900 hover:text-blue-600">
+                  <span className="text-base">Proyectos</span>
                 </Link>
               </li>
               <li>
-                <Link href="/companies" className="flex flex-col items-center py-2 text-gray-900 hover:text-blue-600">
-                  <span className="text-xs">Empresas</span>
+                <Link href="/companies" className="flex flex-col items-center py-3 text-gray-900 hover:text-blue-600">
+                  <span className="text-base">Empresas</span>
                 </Link>
               </li>
               <li>
-                <Link href="/trash" className="flex flex-col items-center py-2 text-gray-500 hover:text-red-600">
-                  <span className="text-xs">🗑️</span>
+                <Link href="/trash" className="flex flex-col items-center py-3 text-gray-500 hover:text-red-600">
+                  <span className="text-base">🗑️</span>
                 </Link>
               </li>
             </ul>
