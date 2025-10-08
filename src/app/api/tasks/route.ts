@@ -24,14 +24,13 @@ export async function GET(request: NextRequest) {
 
     // Obtener tareas del usuario (activas o eliminadas según el parámetro)
 
+    // SOLUCIÓN DEFINITIVA: Si pide eliminadas, filtra por deleted=true. Si no, muestra TODAS.
+    const whereCondition = showDeleted 
+      ? { userId: session.user.id, deleted: true }
+      : { userId: session.user.id }  // SIN filtro de deleted para tareas normales
+
     const tasks = await prisma.task.findMany({
-      where: showDeleted ? {
-        userId: session.user.id,
-        deleted: true
-      } : {
-        userId: session.user.id,
-        deleted: false
-      },
+      where: whereCondition,
       include: {
         company: {
           select: {
