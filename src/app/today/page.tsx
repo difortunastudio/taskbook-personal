@@ -1,7 +1,7 @@
 "use client"
 
 import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState, Suspense } from "react"
 import { BookOpen, Plus, Calendar, CheckCircle, Circle, Building, FileText, Edit3 } from "lucide-react"
 import DifortunaLogo from "@/components/DifortunaLogo"
@@ -42,12 +42,14 @@ interface Project {
 function TodayContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [tasks, setTasks] = useState<Task[]>([])
   const [companies, setCompanies] = useState<Company[]>([])
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [showTaskForm, setShowTaskForm] = useState(false)
   const [selectedTaskForNotes, setSelectedTaskForNotes] = useState<Task | null>(null)
+  const [viewFilter, setViewFilter] = useState<'all' | 'pending' | 'completed'>('all')
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
@@ -55,6 +57,16 @@ function TodayContent() {
     projectId: "",
     dueDate: ""
   })
+
+  // Efecto para leer el filtro de la URL
+  useEffect(() => {
+    const filter = searchParams.get('filter')
+    if (filter === 'pending' || filter === 'completed') {
+      setViewFilter(filter)
+    } else {
+      setViewFilter('all')
+    }
+  }, [searchParams])
 
   useEffect(() => {
     if (status === "loading") return
@@ -333,6 +345,46 @@ function TodayContent() {
           </div>
         )}
 
+        {/* Filter Tabs */}
+        {tasks.length > 0 && (
+          <div className="bg-white rounded-lg shadow-sm mb-6">
+            <div className="border-b border-gray-200">
+              <nav className="-mb-px flex">
+                <button
+                  onClick={() => setViewFilter('all')}
+                  className={`py-4 px-6 text-sm font-medium border-b-2 ${
+                    viewFilter === 'all'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  Todas ({tasks.length})
+                </button>
+                <button
+                  onClick={() => setViewFilter('pending')}
+                  className={`py-4 px-6 text-sm font-medium border-b-2 ${
+                    viewFilter === 'pending'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  Pendientes ({tasks.filter(t => !t.completed).length})
+                </button>
+                <button
+                  onClick={() => setViewFilter('completed')}
+                  className={`py-4 px-6 text-sm font-medium border-b-2 ${
+                    viewFilter === 'completed'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  Completadas ({tasks.filter(t => t.completed).length})
+                </button>
+              </nav>
+            </div>
+          </div>
+        )}
+
         {/* Tasks List */}
         {tasks.length === 0 ? (
           <div className="bg-white rounded-lg shadow-md p-12 text-center">
@@ -349,17 +401,9 @@ function TodayContent() {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Tareas pendientes/vencidas */}
-            {(() => {
-              // Mostrar todas las tareas no completadas, agrupadas por empresa y proyecto
+            {/* Tareas pendientes */}
+            {(viewFilter === 'all' || viewFilter === 'pending') && (() => {
               const pendingTasks = tasks.filter(task => !task.completed)
-              console.log("🔍 DEBUG - Total tareas:", tasks.length, "Pendientes:", pendingTasks.length)
-              console.log("📋 Tareas:", tasks)
-              console.log("⏳ Pendientes:", pendingTasks)
-              
-              // Debug adicional para tareas completadas
-              const completedTasks = tasks.filter(task => task.completed)
-              console.log("✅ DEBUG - Tareas completadas:", completedTasks.length, completedTasks)
               
               if (pendingTasks.length > 0) {
                 // Agrupar por empresa y proyecto con mejor formato
@@ -417,30 +461,33 @@ function TodayContent() {
               }
               
               // Si no hay tareas pendientes, mostrar mensaje
-              return (
-                <div className="bg-white rounded-lg shadow-md p-8 text-center">
-                  <div className="text-gray-400 mb-4">
-                    <CheckCircle className="h-16 w-16 mx-auto" />
+              if (viewFilter === 'pending') {
+                return (
+                  <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                    <div className="text-gray-400 mb-4">
+                      <CheckCircle className="h-16 w-16 mx-auto" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      ¡Excelente! No tienes tareas pendientes
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      Has completado todas tus tareas. ¿Quieres crear una nueva?
+                    </p>
+                    <button 
+                      onClick={() => setShowTaskForm(true)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg inline-flex items-center"
+                    >
+                      <Plus className="h-5 w-5 mr-2" />
+                      Nueva tarea
+                    </button>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    ¡Excelente! No tienes tareas pendientes
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Has completado todas tus tareas. ¿Quieres crear una nueva?
-                  </p>
-                  <button 
-                    onClick={() => setShowTaskForm(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg inline-flex items-center"
-                  >
-                    <Plus className="h-5 w-5 mr-2" />
-                    Nueva tarea
-                  </button>
-                </div>
-              )
+                )
+              }
+              return null
             })()}
 
             {/* Tareas completadas */}
-            {(() => {
+            {(viewFilter === 'all' || viewFilter === 'completed') && (() => {
               const completedTasks = tasks.filter(task => task.completed)
               
               if (completedTasks.length > 0) {
@@ -454,17 +501,33 @@ function TodayContent() {
                       <p className="text-sm text-green-600 mt-1">¡Buen trabajo! Estas tareas ya las has terminado</p>
                     </div>
                     <div className="divide-y divide-green-100">
-                      {completedTasks.slice(0, 5).map((task) => (
+                      {completedTasks.map((task) => (
                         <div key={task.id} className="p-4">
                           <TaskItem task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
                         </div>
                       ))}
-                      {completedTasks.length > 5 && (
-                        <div className="p-4 text-center text-green-600 text-sm">
-                          Y {completedTasks.length - 5} tareas completadas más...
-                        </div>
-                      )}
                     </div>
+                  </div>
+                )
+              } else if (viewFilter === 'completed') {
+                // Mostrar mensaje cuando no hay tareas completadas pero se está filtrando por completadas
+                return (
+                  <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                    <div className="text-gray-400 mb-4">
+                      <CheckCircle className="h-16 w-16 mx-auto" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      No hay tareas completadas
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      Cuando completes tus tareas aparecerán aquí.
+                    </p>
+                    <button 
+                      onClick={() => setViewFilter('all')}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg inline-flex items-center"
+                    >
+                      Ver todas las tareas
+                    </button>
                   </div>
                 )
               }

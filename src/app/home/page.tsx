@@ -191,7 +191,7 @@ export default function Home() {
               <div className="text-xs text-gray-600">Tareas pendientes</div>
             </button>
             <button
-              onClick={() => router.push("/today")}
+              onClick={() => router.push("/today?filter=completed")}
               className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-green-50 transition-all cursor-pointer"
             >
               <div className="text-2xl font-bold text-green-600">{stats.completedTasks}</div>
