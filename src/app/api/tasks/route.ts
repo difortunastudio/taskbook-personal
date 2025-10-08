@@ -22,15 +22,15 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const showDeleted = searchParams.get('deleted') === 'true'
 
-    console.log('🔍 API Tasks GET:', { showDeleted, userId: session.user.id })
-
-    // RECUPERAR TODAS LAS TAREAS SIN FILTROS
-    console.log('🚨 MODO RECUPERACIÓN: Obteniendo TODAS las tareas del usuario')
+    // Obtener tareas del usuario (activas o eliminadas según el parámetro)
 
     const tasks = await prisma.task.findMany({
-      where: {
-        userId: session.user.id
-        // SIN filtro de deleted por ahora
+      where: showDeleted ? {
+        userId: session.user.id,
+        deleted: true
+      } : {
+        userId: session.user.id,
+        deleted: false
       },
       include: {
         company: {
@@ -53,7 +53,6 @@ export async function GET(request: NextRequest) {
       ]
     })
 
-    console.log('✅ Tareas encontradas:', tasks.length)
     return NextResponse.json(tasks)
   } catch (error) {
     console.error("Error obteniendo tareas:", error)
