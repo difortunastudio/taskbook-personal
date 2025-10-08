@@ -446,6 +446,10 @@ function TodayContent() {
             {(viewFilter === 'all' || viewFilter === 'pending') && (() => {
               const pendingTasks = tasks.filter(task => !task.completed)
               
+              // Debug adicional para tareas completadas
+              const completedTasks = tasks.filter(task => task.completed)
+              console.log("✅ DEBUG - Tareas completadas:", completedTasks.length, completedTasks)
+              
               if (pendingTasks.length > 0) {
                 // Agrupar por empresa y proyecto con mejor formato
                 const grouped = {} as Record<string, Task[]>
@@ -609,6 +613,17 @@ function TodayContent() {
           onSave={handleEditTask}
         />
       )}
+
+      {/* Floating Tareas Button (FAB) for mobile */}
+      <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50 md:hidden">
+        <button
+          onClick={() => setShowTaskForm(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg px-8 py-4 flex items-center justify-center text-lg font-semibold"
+        >
+          <Plus className="h-6 w-6 mr-2" />
+          Tareas
+        </button>
+      </div>
     </div>
   )
 }
