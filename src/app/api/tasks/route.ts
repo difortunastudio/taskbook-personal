@@ -24,11 +24,13 @@ export async function GET(request: NextRequest) {
 
     console.log('🔍 API Tasks GET:', { showDeleted, userId: session.user.id })
 
-    // Consulta simplificada
+    // RECUPERAR TODAS LAS TAREAS SIN FILTROS
+    console.log('🚨 MODO RECUPERACIÓN: Obteniendo TODAS las tareas del usuario')
+
     const tasks = await prisma.task.findMany({
       where: {
-        userId: session.user.id,
-        deleted: showDeleted // true para papelera, false para tareas normales
+        userId: session.user.id
+        // SIN filtro de deleted por ahora
       },
       include: {
         company: {
