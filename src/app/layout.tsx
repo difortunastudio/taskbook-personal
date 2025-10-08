@@ -56,33 +56,72 @@ export default function RootLayout({
         <meta name="msapplication-config" content="/browserconfig.xml" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <Providers>
-          <aside className="w-56 min-h-screen bg-gray-100 border-r border-gray-200 flex flex-col py-8 px-4">
-            <div className="mb-8 text-center flex items-center justify-center gap-2">
-              <a href="/home" className="flex items-center gap-2">
-                <DifortunaLogo className="text-blue-600" size={32} variant="simple" />
-                <span className="text-2xl font-bold text-gray-900">TaskBook</span>
-              </a>
+          {/* Header con logo y Eureka - solo visible en móvil */}
+          <header className="md:hidden bg-gray-100 border-b border-gray-200 p-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <DifortunaLogo className="text-blue-600" size={24} variant="simple" />
+              <span className="text-xl font-bold text-gray-900">TaskBook</span>
             </div>
-            <nav className="flex-1">
-              <ul className="flex flex-col gap-4">
-                <li><a href="/home" className="hover:underline text-gray-900">Inicio</a></li>
-                <li><a href="/today" className="hover:underline text-gray-900">Tareas</a></li>
-                <li><Link href="/projects" className="hover:underline text-gray-900">Proyectos</Link></li>
-                <li><Link href="/companies" className="hover:underline text-gray-900">Empresas</Link></li>
-                <li><a href="/ideas" className="hover:underline font-semibold text-yellow-600 bg-yellow-50 rounded px-2 py-1">Eureka</a></li>
-              </ul>
-            </nav>
-            <footer className="mt-8 text-xs text-gray-500 text-center">
-              Creada con ❤️ por <span className="font-medium text-gray-900">Fiorella Gallo Di Fortuna</span>
-            </footer>
-            <UserEmailSidebar />
-          </aside>
-          <main className="flex-1 flex flex-col min-h-screen">
-            {children}
-          </main>
+            <a href="/ideas" className="font-semibold text-yellow-600 bg-yellow-50 rounded px-2 py-1 text-sm">Eureka</a>
+          </header>
+
+          <div className="flex flex-1">
+            {/* Sidebar Desktop - mantiene exactamente los mismos estilos */}
+            <aside className="hidden md:flex w-56 min-h-screen bg-gray-100 border-r border-gray-200 flex-col py-8 px-4">
+              <div className="mb-8 text-center flex items-center justify-center gap-2">
+                <a href="/home" className="flex items-center gap-2">
+                  <DifortunaLogo className="text-blue-600" size={32} variant="simple" />
+                  <span className="text-2xl font-bold text-gray-900">TaskBook</span>
+                </a>
+              </div>
+              <nav className="flex-1">
+                <ul className="flex flex-col gap-4">
+                  <li><a href="/home" className="hover:underline text-gray-900">Inicio</a></li>
+                  <li><a href="/today" className="hover:underline text-gray-900">Tareas</a></li>
+                  <li><Link href="/projects" className="hover:underline text-gray-900">Proyectos</Link></li>
+                  <li><Link href="/companies" className="hover:underline text-gray-900">Empresas</Link></li>
+                  <li><a href="/ideas" className="hover:underline font-semibold text-yellow-600 bg-yellow-50 rounded px-2 py-1">Eureka</a></li>
+                </ul>
+              </nav>
+              <footer className="mt-8 text-xs text-gray-500 text-center">
+                Creada con ❤️ por <span className="font-medium text-gray-900">Fiorella Gallo Di Fortuna</span>
+              </footer>
+              <UserEmailSidebar />
+            </aside>
+
+            <main className="flex-1 flex flex-col min-h-screen pb-16 md:pb-0">
+              {children}
+            </main>
+          </div>
+
+          {/* Navegación inferior - solo visible en móvil */}
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 px-4 py-2">
+            <ul className="flex justify-around items-center">
+              <li>
+                <a href="/home" className="flex flex-col items-center py-2 text-gray-900 hover:text-blue-600">
+                  <span className="text-xs">Inicio</span>
+                </a>
+              </li>
+              <li>
+                <a href="/today" className="flex flex-col items-center py-2 text-gray-900 hover:text-blue-600">
+                  <span className="text-xs">Tareas</span>
+                </a>
+              </li>
+              <li>
+                <Link href="/projects" className="flex flex-col items-center py-2 text-gray-900 hover:text-blue-600">
+                  <span className="text-xs">Proyectos</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/companies" className="flex flex-col items-center py-2 text-gray-900 hover:text-blue-600">
+                  <span className="text-xs">Empresas</span>
+                </Link>
+              </li>
+            </ul>
+          </nav>
         </Providers>
       </body>
     </html>

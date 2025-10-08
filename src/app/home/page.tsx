@@ -184,7 +184,7 @@ export default function Home() {
         {!loading && (
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
             <button
-              onClick={() => router.push("/today")}
+              onClick={() => router.push("/today?filter=pending")}
               className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-blue-50 transition-all cursor-pointer"
             >
               <div className="text-2xl font-bold text-blue-600">{stats.pendingTasks}</div>
@@ -291,19 +291,19 @@ export default function Home() {
 
         {/* Recent Activity */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-3 sm:space-y-0">
             <h3 className="text-xl font-semibold text-gray-900">Actividad Reciente</h3>
-            <div className="flex space-x-2">
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
               <button 
                 onClick={() => router.push("/today")}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm text-blue-600 hover:text-blue-700 text-left sm:text-center"
               >
                 Ver todas las tareas
               </button>
-              <span className="text-gray-300">•</span>
+              <span className="text-gray-300 hidden sm:inline">•</span>
               <button 
                 onClick={() => router.push("/projects")}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm text-blue-600 hover:text-blue-700 text-left sm:text-center"
               >
                 Ver todos los proyectos
               </button>
@@ -316,7 +316,7 @@ export default function Home() {
               <p className="text-gray-500 mt-2">Cargando actividad...</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {/* Recent Tasks */}
               <div>
                 <h4 className="text-lg font-medium text-gray-900 mb-4 flex items-center">
@@ -339,40 +339,40 @@ export default function Home() {
                     {recentTasks.map((task) => (
                       <div 
                         key={task.id}
-                        className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
+                        className="flex items-start p-3 sm:p-4 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow overflow-hidden"
                       >
-                        <div className="flex items-center flex-1">
-                          <button
-                            onClick={() => toggleTask(task.id, !task.completed)}
-                            className="mr-3 p-1"
-                          >
-                            {task.completed ? (
-                              <CheckCircle className="h-4 w-4 text-green-500" />
-                            ) : (
-                              <Circle className="h-4 w-4 text-gray-400" />
+                        <button
+                          onClick={() => toggleTask(task.id, !task.completed)}
+                          className="mr-3 p-1 flex-shrink-0"
+                        >
+                          {task.completed ? (
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <Circle className="h-4 w-4 text-gray-400" />
+                          )}
+                        </button>
+                        
+                        <div className="flex-1 min-w-0 overflow-hidden">
+                          <p className={`text-sm font-medium truncate ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+                            {task.title}
+                          </p>
+                          <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center mt-1 text-xs text-gray-500 gap-1 sm:gap-2">
+                            {task.company && (
+                              <div className="flex items-center min-w-0 max-w-full">
+                                <div 
+                                  className="w-2 h-2 rounded-full mr-1 flex-shrink-0"
+                                  style={{ backgroundColor: task.company.color }}
+                                ></div>
+                                <span className="truncate">{task.company.name}</span>
+                              </div>
                             )}
-                          </button>
-                          
-                          <div className="flex-1 min-w-0">
-                            <p className={`text-sm font-medium truncate ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
-                              {task.title}
-                            </p>
-                            <div className="flex items-center mt-1 text-xs text-gray-500">
-                              {task.company && (
-                                <>
-                                  <div 
-                                    className="w-2 h-2 rounded-full mr-1"
-                                    style={{ backgroundColor: task.company.color }}
-                                  ></div>
-                                  <span className="mr-2">{task.company.name}</span>
-                                </>
-                              )}
-                              {task.project && (
-                                <>
-                                  <FolderOpen className="h-3 w-3 mr-1" />
-                                  <span className="mr-2">{task.project.name}</span>
-                                </>
-                              )}
+                            {task.project && (
+                              <div className="flex items-center min-w-0 max-w-full">
+                                <FolderOpen className="h-3 w-3 mr-1 flex-shrink-0" />
+                                <span className="truncate">{task.project.name}</span>
+                              </div>
+                            )}
+                            <div className="flex items-center text-gray-400 flex-shrink-0">
                               <Clock className="h-3 w-3 mr-1" />
                               <span>{new Date(task.createdAt).toLocaleDateString('es-ES')}</span>
                             </div>
@@ -407,29 +407,37 @@ export default function Home() {
                       <div 
                         key={project.id}
                         onClick={() => router.push(`/projects/${project.id}`)}
-                        className="p-3 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow cursor-pointer"
+                        className="p-3 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow cursor-pointer overflow-hidden"
                       >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center mb-2">
-                              <div 
-                                className="w-3 h-3 rounded-full mr-2"
-                                style={{ backgroundColor: project.company.color }}
-                              ></div>
-                              <p className="text-sm font-medium text-gray-900 truncate">
-                                {project.name}
-                              </p>
+                        <div className="min-w-0 overflow-hidden">
+                          <div className="flex items-center mb-2">
+                            <div 
+                              className="w-3 h-3 rounded-full mr-2 flex-shrink-0"
+                              style={{ backgroundColor: project.company.color }}
+                            ></div>
+                            <p className="text-sm font-medium text-gray-900 truncate">
+                              {project.name}
+                            </p>
+                          </div>
+                          {project.description && (
+                            <p className="text-xs text-gray-600 mb-2 overflow-hidden" style={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical'
+                            }}>
+                              {project.description}
+                            </p>
+                          )}
+                          <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center text-xs text-gray-500 gap-1 sm:gap-2">
+                            <div className="flex items-center min-w-0">
+                              <Building className="h-3 w-3 mr-1 flex-shrink-0" />
+                              <span className="truncate">{project.company.name}</span>
                             </div>
-                            {project.description && (
-                              <p className="text-xs text-gray-600 mb-2 line-clamp-2">
-                                {project.description}
-                              </p>
-                            )}
-                            <div className="flex items-center text-xs text-gray-500">
-                              <Building className="h-3 w-3 mr-1" />
-                              <span className="mr-3">{project.company.name}</span>
+                            <div className="flex items-center flex-shrink-0">
                               <CheckCircle className="h-3 w-3 mr-1" />
-                              <span className="mr-3">{project._count.tasks} tareas</span>
+                              <span>{project._count.tasks} tareas</span>
+                            </div>
+                            <div className="flex items-center text-gray-400 flex-shrink-0">
                               <Clock className="h-3 w-3 mr-1" />
                               <span>{new Date(project.createdAt).toLocaleDateString('es-ES')}</span>
                             </div>

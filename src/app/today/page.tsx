@@ -1,8 +1,8 @@
 "use client"
 
 import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useState, Suspense } from "react"
 import { BookOpen, Plus, Calendar, CheckCircle, Circle, Building, FileText, Edit3 } from "lucide-react"
 import DifortunaLogo from "@/components/DifortunaLogo"
 import TaskNotesModal from "@/components/TaskNotesModal"
@@ -39,9 +39,11 @@ interface Project {
   company: Company
 }
 
-export default function Today() {
+function TodayContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const filterType = searchParams.get('filter') // 'pending' o null
   const [tasks, setTasks] = useState<Task[]>([])
   const [companies, setCompanies] = useState<Company[]>([])
   const [projects, setProjects] = useState<Project[]>([])
@@ -208,8 +210,12 @@ export default function Today() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Mi Día</h2>
-            <p className="text-gray-600">Gestiona tus tareas de hoy</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              {filterType === 'pending' ? 'Tareas Pendientes' : 'Mi Día'}
+            </h2>
+            <p className="text-gray-600">
+              {filterType === 'pending' ? 'Todas tus tareas pendientes organizadas' : 'Gestiona tus tareas de hoy'}
+            </p>
           </div>
           <button 
             onClick={() => setShowTaskForm(true)}
@@ -353,6 +359,10 @@ export default function Today() {
             {(() => {
               // Mostrar todas las tareas no completadas, agrupadas por empresa y proyecto
               const pendingTasks = tasks.filter(task => !task.completed)
+              console.log("🔍 DEBUG - Total tareas:", tasks.length, "Pendientes:", pendingTasks.length, "Filter:", filterType)
+              console.log("📋 Tareas:", tasks)
+              console.log("⏳ Pendientes:", pendingTasks)
+              
               if (pendingTasks.length > 0) {
                 // Agrupar por empresa y proyecto
                 const grouped = {} as Record<string, Task[]>
@@ -365,13 +375,38 @@ export default function Today() {
                   grouped[key].push(task)
                 })
                 return (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg shadow-md">
-                    <div className="p-6 border-b border-yellow-200">
-                      <h3 className="text-lg font-semibold text-yellow-800 flex items-center">
-                        <Circle className="h-5 w-5 mr-2 text-yellow-500" />
-                        Tareas pendientes ({pendingTasks.length})
+                  <div className={`${
+                    filterType === 'pending' 
+                      ? 'bg-white border border-gray-200' 
+                      : 'bg-yellow-50 border border-yellow-200'
+                  } rounded-lg shadow-md`}>
+                    <div className={`p-6 border-b ${
+                      filterType === 'pending' 
+                        ? 'border-gray-200' 
+                        : 'border-yellow-200'
+                    }`}>
+                      <h3 className={`text-lg font-semibold flex items-center ${
+                        filterType === 'pending' 
+                          ? 'text-gray-900' 
+                          : 'text-yellow-800'
+                      }`}>
+                        <Circle className={`h-5 w-5 mr-2 ${
+                          filterType === 'pending' 
+                            ? 'text-blue-500' 
+                            : 'text-yellow-500'
+                        }`} />
+                        {filterType === 'pending' ? 'Todas las Tareas Pendientes' : 'Tareas pendientes'} ({pendingTasks.length})
                       </h3>
-                      <p className="text-sm text-yellow-600 mt-1">Resumen de todas tus tareas pendientes agrupadas por empresa/proyecto</p>
+                      <p className={`text-sm mt-1 ${
+                        filterType === 'pending' 
+                          ? 'text-gray-600' 
+                          : 'text-yellow-600'
+                      }`}>
+                        {filterType === 'pending' 
+                          ? 'Aquí tienes todas tus tareas pendientes organizadas por empresa y proyecto'
+                          : 'Resumen de todas tus tareas pendientes agrupadas por empresa/proyecto'
+                        }
+                      </p>
                     </div>
                     <div className="divide-y divide-yellow-100">
                       {Object.entries(grouped).map(([group, groupTasks]) => (
@@ -386,11 +421,35 @@ export default function Today() {
                   </div>
                 )
               }
-              return null
+              
+              // Si no hay tareas pendientes, mostrar mensaje
+              return (
+                <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                  <div className="text-gray-400 mb-4">
+                    <CheckCircle className="h-16 w-16 mx-auto" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    {filterType === 'pending' ? '¡No tienes tareas pendientes!' : 'No hay tareas pendientes'}
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    {filterType === 'pending' 
+                      ? 'Todas las tareas están completadas. ¡Buen trabajo!' 
+                      : 'Crea una nueva tarea para empezar a organizarte.'
+                    }
+                  </p>
+                  <button 
+                    onClick={() => setShowTaskForm(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center mx-auto"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Crear primera tarea
+                  </button>
+                </div>
+              )
             })()}
 
-            {/* Tareas completadas */}
-            {(() => {
+            {/* Tareas completadas - solo mostrar si no estamos filtrando por pendientes */}
+            {filterType !== 'pending' && (() => {
               const today = new Date().toISOString().split('T')[0]
               const todayTasks = tasks.filter(task => 
                 task.completed
@@ -518,5 +577,17 @@ function TaskItem({ task, toggleTask, setSelectedTaskForNotes }: {
         </button>
       </div>
     </div>
+  )
+}
+
+export default function Today() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    }>
+      <TodayContent />
+    </Suspense>
   )
 }
