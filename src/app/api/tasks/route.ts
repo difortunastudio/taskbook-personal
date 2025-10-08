@@ -20,43 +20,17 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-<<<<<<< HEAD
-<<<<<<< HEAD
     const showDeleted = searchParams.get('deleted') === 'true'
 
     // Obtener tareas del usuario (activas o eliminadas según el parámetro)
-=======
-    const filter = searchParams.get('filter') || 'today'
-    const showDeleted = searchParams.get('deleted') === 'true'
-
-    let whereClause: TaskWhereClause = {
-      userId: session.user.id,
-      deleted: showDeleted ? true : false
-    }
->>>>>>> 9db4b72 (feat: implement soft delete and restore functionality for tasks)
-
-    // SOLUCIÓN DEFINITIVA: Si pide eliminadas, filtra por deleted=true. Si no, muestra TODAS.
-    const whereCondition = showDeleted 
-      ? { userId: session.user.id, deleted: true }
-      : { userId: session.user.id }  // SIN filtro de deleted para tareas normales
-=======
-    const showDeleted = searchParams.get('deleted') === 'true'
-
-    console.log('🔍 API Tasks GET:', { showDeleted, userId: session.user.id })
->>>>>>> 78424b5 (refactor: simplify task retrieval logic and improve filtering for deleted tasks)
-
-    // RECUPERAR TODAS LAS TAREAS SIN FILTROS
-    console.log('🚨 MODO RECUPERACIÓN: Obteniendo TODAS las tareas del usuario')
-
     const tasks = await prisma.task.findMany({
-<<<<<<< HEAD
-      where: whereCondition,
-=======
-      where: {
-        userId: session.user.id
-        // SIN filtro de deleted por ahora
+      where: showDeleted ? {
+        userId: session.user.id,
+        deleted: true
+      } : {
+        userId: session.user.id,
+        deleted: false
       },
->>>>>>> 78424b5 (refactor: simplify task retrieval logic and improve filtering for deleted tasks)
       include: {
         company: {
           select: {
@@ -78,7 +52,6 @@ export async function GET(request: NextRequest) {
       ]
     })
 
-    console.log('✅ Tareas encontradas:', tasks.length)
     return NextResponse.json(tasks)
   } catch (error) {
     console.error("Error obteniendo tareas:", error)
