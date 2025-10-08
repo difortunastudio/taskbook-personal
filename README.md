@@ -89,6 +89,21 @@ src/
 - [ ] Dashboard con estadísticas
 - [ ] Exportación de datos
 
+## Mejoras y Roadmap
+
+### Mejoras pendientes
+- [ ] Buscador de tareas (por texto y por tags)
+- [ ] Mejorar utilidad de los tags en la búsqueda y filtrado
+- [ ] Adjuntar archivos PDF a tareas
+- [ ] Convertir la app en SaaS (pagos, gestión multiusuario avanzada)
+
+### Funcionalidades actuales
+- Multiusuario con NextAuth
+- Tareas con edición, borrado suave (Papelera), restauración
+- Filtros por estado (todas, pendientes, completadas)
+- Sidebar y navegación móvil con acceso rápido
+- API y DB actualizadas para soft delete
+
 ## Contribución
 
 Este es un proyecto personal, pero las sugerencias son bienvenidas a través de issues.
