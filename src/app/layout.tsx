@@ -61,10 +61,10 @@ export default function RootLayout({
         <Providers>
           {/* Header con logo y Eureka - solo visible en móvil */}
           <header className="md:hidden bg-gray-100 border-b border-gray-200 p-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <a href="/home" className="flex items-center gap-2">
               <DifortunaLogo className="text-blue-600" size={24} variant="simple" />
               <span className="text-xl font-bold text-gray-900">TaskBook</span>
-            </div>
+            </a>
             <a href="/ideas" className="font-semibold text-yellow-600 bg-yellow-50 rounded px-2 py-1 text-sm">Eureka</a>
           </header>
 
