@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { BookOpen, Plus, Calendar, CheckCircle, Circle, Building, FileText, Edit3 } from "lucide-react"
 import DifortunaLogo from "@/components/DifortunaLogo"
 import TaskNotesModal from "@/components/TaskNotesModal"
@@ -208,12 +208,8 @@ function TodayContent() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              {filterType === 'pending' ? 'Tareas Pendientes' : 'Mi Día'}
-            </h2>
-            <p className="text-gray-600">
-              {filterType === 'pending' ? 'Todas tus tareas pendientes organizadas' : 'Gestiona tus tareas de hoy'}
-            </p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">🎯 Mi Día - ACTUALIZADO</h2>
+            <p className="text-gray-600">Gestiona TODAS tus tareas (pendientes y completadas)</p>
           </div>
           <button 
             onClick={() => setShowTaskForm(true)}
@@ -341,7 +337,7 @@ function TodayContent() {
         {tasks.length === 0 ? (
           <div className="bg-white rounded-lg shadow-md p-12 text-center">
             <Calendar className="h-16 w-16 mx-auto text-gray-300 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No tienes tareas para hoy</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No tienes tareas</h3>
             <p className="text-gray-600 mb-6">Crea tu primera tarea para empezar a organizarte</p>
             <button 
               onClick={() => setShowTaskForm(true)}
@@ -360,6 +356,10 @@ function TodayContent() {
               console.log("🔍 DEBUG - Total tareas:", tasks.length, "Pendientes:", pendingTasks.length)
               console.log("📋 Tareas:", tasks)
               console.log("⏳ Pendientes:", pendingTasks)
+              
+              // Debug adicional para tareas completadas
+              const completedTasks = tasks.filter(task => task.completed)
+              console.log("✅ DEBUG - Tareas completadas:", completedTasks.length, completedTasks)
               
               if (pendingTasks.length > 0) {
                 // Agrupar por empresa y proyecto con mejor formato
@@ -492,12 +492,12 @@ function TaskItem({ task, toggleTask, setSelectedTaskForNotes }: {
   setSelectedTaskForNotes: (task: Task) => void
 }) {
   return (
-    <div className="p-6 hover:bg-gray-50 transition-colors">
+    <div className="p-4 hover:bg-gray-50 transition-colors">
       <div className="flex items-start justify-between">
         <div className="flex items-start flex-1">
           <button
             onClick={() => toggleTask(task.id, !task.completed)}
-            className="mr-4 mt-1 p-1"
+            className="mr-3 mt-1 p-1"
           >
             {task.completed ? (
               <CheckCircle className="h-5 w-5 text-green-500" />
@@ -507,12 +507,12 @@ function TaskItem({ task, toggleTask, setSelectedTaskForNotes }: {
           </button>
           
           <div className="flex-1 min-w-0">
-            <h4 className={`text-lg font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+            <h4 className={`font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
               {task.title}
             </h4>
             
             {task.description && (
-              <p className="text-gray-600 mt-1">{task.description}</p>
+              <p className="text-gray-600 mt-1 text-sm">{task.description}</p>
             )}
 
             {task.notes && (
@@ -524,11 +524,11 @@ function TaskItem({ task, toggleTask, setSelectedTaskForNotes }: {
               </div>
             )}
             
-            <div className="flex items-center mt-3 space-x-4 text-sm text-gray-500">
+            <div className="flex items-center mt-2 space-x-3 text-xs text-gray-500">
               {task.company && (
                 <div className="flex items-center">
                   <div 
-                    className="w-3 h-3 rounded-full mr-2"
+                    className="w-2 h-2 rounded-full mr-1"
                     style={{ backgroundColor: task.company.color }}
                   ></div>
                   <Building className="h-3 w-3 mr-1" />
@@ -539,14 +539,14 @@ function TaskItem({ task, toggleTask, setSelectedTaskForNotes }: {
               {task.project && (
                 <div className="flex items-center">
                   <span className="text-gray-400">•</span>
-                  <span className="ml-2">{task.project.name}</span>
+                  <span className="ml-1">{task.project.name}</span>
                 </div>
               )}
               
               {task.dueDate && (
                 <div className="flex items-center">
                   <span className="text-gray-400">•</span>
-                  <Calendar className="h-3 w-3 mr-1 ml-2" />
+                  <Calendar className="h-3 w-3 mr-1 ml-1" />
                   <span>
                     {new Date(task.dueDate).toLocaleDateString('es-ES')}
                   </span>
@@ -555,8 +555,8 @@ function TaskItem({ task, toggleTask, setSelectedTaskForNotes }: {
 
               <div className="flex items-center">
                 <span className="text-gray-400">•</span>
-                <span className="ml-2">
-                  {task.notes ? 'Actualizado' : 'Creado'}: {new Date(task.updatedAt || task.createdAt).toLocaleDateString('es-ES')}
+                <span className="ml-1">
+                  {new Date(task.updatedAt || task.createdAt).toLocaleDateString('es-ES')}
                 </span>
               </div>
             </div>
@@ -565,7 +565,7 @@ function TaskItem({ task, toggleTask, setSelectedTaskForNotes }: {
 
         <button
           onClick={() => setSelectedTaskForNotes(task)}
-          className="ml-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+          className="ml-3 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
           title="Añadir/editar notas"
         >
           <FileText className="h-4 w-4" />
