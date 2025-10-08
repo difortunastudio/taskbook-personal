@@ -1,8 +1,8 @@
 "use client"
 
 import { useSession } from "next-auth/react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState, Suspense } from "react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { BookOpen, Plus, Calendar, CheckCircle, Circle, Building, FileText, Edit3 } from "lucide-react"
 import DifortunaLogo from "@/components/DifortunaLogo"
 import TaskNotesModal from "@/components/TaskNotesModal"
@@ -42,8 +42,6 @@ interface Project {
 function TodayContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const filterType = searchParams.get('filter') // 'pending' o null
   const [tasks, setTasks] = useState<Task[]>([])
   const [companies, setCompanies] = useState<Company[]>([])
   const [projects, setProjects] = useState<Project[]>([])
@@ -359,7 +357,7 @@ function TodayContent() {
             {(() => {
               // Mostrar todas las tareas no completadas, agrupadas por empresa y proyecto
               const pendingTasks = tasks.filter(task => !task.completed)
-              console.log("🔍 DEBUG - Total tareas:", tasks.length, "Pendientes:", pendingTasks.length, "Filter:", filterType)
+              console.log("🔍 DEBUG - Total tareas:", tasks.length, "Pendientes:", pendingTasks.length)
               console.log("📋 Tareas:", tasks)
               console.log("⏳ Pendientes:", pendingTasks)
               
@@ -441,27 +439,31 @@ function TodayContent() {
               )
             })()}
 
-            {/* Tareas completadas - solo mostrar si no estamos filtrando por pendientes */}
-            {filterType !== 'pending' && (() => {
-              const today = new Date().toISOString().split('T')[0]
-              const todayTasks = tasks.filter(task => 
-                task.completed
-              )
+            {/* Tareas completadas */}
+            {(() => {
+              const completedTasks = tasks.filter(task => task.completed)
               
-              if (todayTasks.length > 0) {
+              if (completedTasks.length > 0) {
                 return (
-                  <div className="bg-white rounded-lg shadow-md">
-                    <div className="p-6 border-b border-gray-200">
-                      <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                        <CheckCircle className="h-5 w-5 mr-2 text-green-500" />
-                        Tareas completadas ({todayTasks.length} completadas)
+                  <div className="bg-green-50 border border-green-200 rounded-lg shadow-md">
+                    <div className="p-6 border-b border-green-200">
+                      <h3 className="text-lg font-semibold text-green-800 flex items-center">
+                        <CheckCircle className="h-5 w-5 mr-2 text-green-600" />
+                        Tareas Completadas ({completedTasks.length})
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">Tareas que ya has terminado</p>
+                      <p className="text-sm text-green-600 mt-1">¡Buen trabajo! Estas tareas ya las has terminado</p>
                     </div>
-                    <div className="divide-y divide-gray-100">
-                      {todayTasks.map((task) => (
-                        <TaskItem key={task.id} task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
+                    <div className="divide-y divide-green-100">
+                      {completedTasks.slice(0, 5).map((task) => (
+                        <div key={task.id} className="p-4">
+                          <TaskItem task={task} toggleTask={toggleTask} setSelectedTaskForNotes={setSelectedTaskForNotes} />
+                        </div>
                       ))}
+                      {completedTasks.length > 5 && (
+                        <div className="p-4 text-center text-green-600 text-sm">
+                          Y {completedTasks.length - 5} tareas completadas más...
+                        </div>
+                      )}
                     </div>
                   </div>
                 )
