@@ -1,4 +1,4 @@
-# TaskBook - Tu Cuaderno Virtual Personalizado
+# TaskBook - Tu Cuaderno Virtual Personalizado.
 
 Una aplicación web personal tipo cuaderno digital para organizar tus tareas y proyectos de manera simple y eficiente.
 
