@@ -84,6 +84,7 @@ export default function RootLayout({
                   <li><Link href="/projects" className="hover:underline text-gray-900">Proyectos</Link></li>
                   <li><Link href="/companies" className="hover:underline text-gray-900">Empresas</Link></li>
                   <li><a href="/ideas" className="hover:underline font-semibold text-yellow-600 bg-yellow-50 rounded px-2 py-1">Eureka</a></li>
+                  <li><Link href="/trash" className="hover:underline text-gray-500">🗑️ Papelera</Link></li>
                 </ul>
               </nav>
               <footer className="mt-8 text-xs text-gray-500 text-center">
@@ -118,6 +119,11 @@ export default function RootLayout({
               <li>
                 <Link href="/companies" className="flex flex-col items-center py-2 text-gray-900 hover:text-blue-600">
                   <span className="text-xs">Empresas</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/trash" className="flex flex-col items-center py-2 text-gray-500 hover:text-red-600">
+                  <span className="text-xs">🗑️</span>
                 </Link>
               </li>
             </ul>
