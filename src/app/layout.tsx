@@ -5,6 +5,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import DifortunaLogo from "@/components/DifortunaLogo";
 import UserEmailSidebar from "@/components/UserEmailSidebar";
+import { Trash2 } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -65,7 +66,12 @@ export default function RootLayout({
               <DifortunaLogo className="text-blue-600" size={24} variant="simple" />
               <span className="text-xl font-bold text-gray-900">TaskBook</span>
             </a>
-            <a href="/ideas" className="font-semibold text-yellow-600 bg-yellow-50 rounded px-2 py-1 text-sm">Eureka</a>
+            <div className="flex items-center gap-3">
+              <a href="/ideas" className="font-semibold text-yellow-600 bg-yellow-50 rounded px-2 py-1 text-sm">Eureka</a>
+              <a href="/trash" className="text-gray-500 hover:text-red-600 p-1" aria-label="Papelera">
+                <Trash2 className="h-6 w-6" />
+              </a>
+            </div>
           </header>
 
           <div className="flex flex-1">
