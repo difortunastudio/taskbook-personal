@@ -57,11 +57,11 @@ export default function RootLayout({
         <meta name="msapplication-config" content="/browserconfig.xml" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-white`}
       >
         <Providers>
-          {/* Header con logo y Eureka - solo visible en móvil */}
-          <header className="md:hidden bg-gray-100 border-b border-gray-200 p-4 flex items-center justify-between">
+          {/* Header móvil SIEMPRE visible en móvil */}
+          <header className="md:hidden bg-gray-100 border-b border-gray-200 p-4 flex items-center justify-between sticky top-0 z-50">
             <a href="/home" className="flex items-center gap-2">
               <DifortunaLogo className="text-blue-600" size={24} variant="simple" />
               <span className="text-xl font-bold text-gray-900">TaskBook</span>
@@ -75,7 +75,7 @@ export default function RootLayout({
           </header>
 
           <div className="flex flex-1">
-            {/* Sidebar Desktop - mantiene exactamente los mismos estilos */}
+            {/* Sidebar Desktop - igual que antes */}
             <aside className="hidden md:flex w-56 min-h-screen bg-gray-100 border-r border-gray-200 flex-col py-8 px-4">
               <div className="mb-8 text-center flex items-center justify-center gap-2">
                 <a href="/home" className="flex items-center gap-2">
@@ -99,13 +99,14 @@ export default function RootLayout({
               <UserEmailSidebar />
             </aside>
 
-            <main className="flex-1 flex flex-col min-h-screen pb-16 md:pb-0">
+            {/* Main content, padding bottom para que no tape la barra inferior */}
+            <main className="flex-1 flex flex-col min-h-screen pb-16 md:pb-0 bg-white">
               {children}
             </main>
           </div>
 
-          {/* Navegación inferior - solo visible en móvil */}
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 px-4 py-3">
+          {/* Barra inferior móvil SIN papelera */}
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 px-4 py-3 z-40">
             <ul className="flex justify-around items-center">
               <li>
                 <a href="/home" className="flex flex-col items-center py-3 text-gray-900 hover:text-blue-600">
