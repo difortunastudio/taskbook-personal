@@ -44,7 +44,7 @@ const BottomNavigation = () => {
   return (
     <>
       {/* Bottom Navigation - Mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-1 z-50">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-1 py-2 z-50 safe-area-bottom">
         <div className="flex justify-around items-center max-w-md mx-auto">
           {navItems.map((item) => {
             const Icon = item.icon
@@ -52,14 +52,14 @@ const BottomNavigation = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center p-2 rounded-lg min-w-[60px] transition-all ${
+                className={`flex flex-col items-center justify-center p-3 rounded-lg min-w-[70px] min-h-[60px] transition-all active:scale-95 ${
                   item.isActive
                     ? "text-blue-600 bg-blue-50"
                     : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
                 }`}
               >
-                <Icon className="h-5 w-5 mb-1" />
-                <span className="text-xs font-medium">{item.label}</span>
+                <Icon className="h-6 w-6 mb-1" />
+                <span className="text-[11px] font-medium leading-tight">{item.label}</span>
               </Link>
             )
           })}

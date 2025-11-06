@@ -255,17 +255,17 @@ function TodayContent() {
   console.log("🎯 Estado actual - Tareas:", tasks.length, "Loading:", loading, "Session:", !!session)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 pb-24 md:pb-8">
       {/* Sidebar y contenido principal, sin header superior */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 md:mb-8 gap-3">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">🎯 Mi Día - ACTUALIZADO</h2>
-            <p className="text-gray-600">Gestiona TODAS tus tareas (pendientes y completadas)</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">🎯 Mi Día</h2>
+            <p className="text-sm md:text-base text-gray-600">Gestiona tus tareas</p>
           </div>
           <button 
             onClick={() => setShowTaskForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center"
+            className="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg items-center min-h-[44px]"
           >
             <Plus className="h-5 w-5 mr-2" />
             Nueva Tarea
@@ -274,45 +274,45 @@ function TodayContent() {
 
         {/* Create Task Form */}
         {showTaskForm && (
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Crear Nueva Tarea</h3>
-            <form onSubmit={createTask} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6 mb-4 md:mb-6">
+            <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">Crear Nueva Tarea</h3>
+            <form onSubmit={createTask} className="space-y-3 md:space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">
                     Título de la tarea *
                   </label>
                   <input
                     type="text"
                     value={newTask.title}
                     onChange={(e) => setNewTask(prev => ({ ...prev, title: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Ej: Revisar documentación, Llamar cliente..."
+                    className="w-full px-3 py-3 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
+                    placeholder="Ej: Revisar documentación..."
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">
                     Fecha límite (opcional)
                   </label>
                   <input
                     type="date"
                     value={newTask.dueDate}
                     onChange={(e) => setNewTask(prev => ({ ...prev, dueDate: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-3 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">
                     Empresa (opcional)
                   </label>
                   <select
                     value={newTask.companyId}
                     onChange={(e) => setNewTask(prev => ({ ...prev, companyId: e.target.value, projectId: "" }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-3 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
                   >
                     <option value="">Sin empresa</option>
                     {companies.map((company) => (
@@ -323,13 +323,13 @@ function TodayContent() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">
                     Proyecto (opcional)
                   </label>
                   <select
                     value={newTask.projectId}
                     onChange={(e) => setNewTask(prev => ({ ...prev, projectId: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-3 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
                     disabled={!newTask.companyId}
                   >
                     <option value="">Sin proyecto</option>
@@ -343,19 +343,19 @@ function TodayContent() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">
                   Descripción (opcional)
                 </label>
                 <textarea
                   value={newTask.description}
                   onChange={(e) => setNewTask(prev => ({ ...prev, description: e.target.value }))}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Detalles adicionales sobre la tarea..."
+                  className="w-full px-3 py-3 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
+                  placeholder="Detalles adicionales..."
                 />
               </div>
 
-              <div className="flex gap-3 justify-end">
+              <div className="flex gap-2 md:gap-3 justify-end pt-2">
                 <button
                   type="button"
                   onClick={() => {
@@ -368,16 +368,16 @@ function TodayContent() {
                       dueDate: ""
                     })
                   }}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                  className="px-4 md:px-4 py-3 md:py-2 text-gray-600 hover:text-gray-800 min-h-[44px] text-base"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-5 md:px-6 py-3 md:py-2 rounded-lg flex items-center min-h-[44px] text-base active:scale-95 transition-transform"
                   disabled={!newTask.title.trim()}
                 >
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="h-5 w-5 mr-2" />
                   Crear Tarea
                 </button>
               </div>
@@ -387,12 +387,12 @@ function TodayContent() {
 
         {/* Filter Tabs */}
         {tasks.length > 0 && (
-          <div className="bg-white rounded-lg shadow-sm mb-6">
+          <div className="bg-white rounded-lg shadow-sm mb-4 md:mb-6">
             <div className="border-b border-gray-200">
               <nav className="-mb-px flex">
                 <button
                   onClick={() => setViewFilter('all')}
-                  className={`py-4 px-6 text-sm font-medium border-b-2 ${
+                  className={`flex-1 py-3 md:py-4 px-3 md:px-6 text-xs md:text-sm font-medium border-b-2 min-h-[48px] ${
                     viewFilter === 'all'
                       ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -402,7 +402,7 @@ function TodayContent() {
                 </button>
                 <button
                   onClick={() => setViewFilter('pending')}
-                  className={`py-4 px-6 text-sm font-medium border-b-2 ${
+                  className={`flex-1 py-3 md:py-4 px-3 md:px-6 text-xs md:text-sm font-medium border-b-2 min-h-[48px] ${
                     viewFilter === 'pending'
                       ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -412,7 +412,7 @@ function TodayContent() {
                 </button>
                 <button
                   onClick={() => setViewFilter('completed')}
-                  className={`py-4 px-6 text-sm font-medium border-b-2 ${
+                  className={`flex-1 py-3 md:py-4 px-3 md:px-6 text-xs md:text-sm font-medium border-b-2 min-h-[48px] ${
                     viewFilter === 'completed'
                       ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -472,27 +472,27 @@ function TodayContent() {
                 })
                 return (
                   <div className="bg-white border border-gray-200 rounded-lg shadow-md">
-                    <div className="p-6 border-b border-gray-200">
-                      <h3 className="text-lg font-semibold flex items-center text-gray-900">
+                    <div className="p-4 md:p-6 border-b border-gray-200">
+                      <h3 className="text-base md:text-lg font-semibold flex items-center text-gray-900">
                         <Circle className="h-5 w-5 mr-2 text-blue-500" />
-                        Todas las Tareas Pendientes ({pendingTasks.length})
+                        Tareas Pendientes ({pendingTasks.length})
                       </h3>
-                      <p className="text-sm mt-1 text-gray-600">
-                        Aquí tienes todas tus tareas pendientes organizadas por empresa y proyecto
+                      <p className="text-xs md:text-sm mt-1 text-gray-600">
+                        Organizadas por empresa y proyecto
                       </p>
                     </div>
                     <div className="divide-y divide-gray-100">
                       {sortedGroups.map(([group, groupTasks]) => (
-                        <div key={group} className="p-6">
-                          <div className="flex items-center mb-4">
-                            <h4 className="font-semibold text-gray-800 text-base">{group}</h4>
-                            <span className="ml-2 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        <div key={group} className="p-3 md:p-6">
+                          <div className="flex items-center mb-3 md:mb-4">
+                            <h4 className="font-semibold text-gray-800 text-sm md:text-base">{group}</h4>
+                            <span className="ml-2 bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full">
                               {groupTasks.length}
                             </span>
                           </div>
-                          <div className="space-y-3">
+                          <div className="space-y-2 md:space-y-3">
                             {groupTasks.map(task => (
-                              <div key={task.id} className="pl-4 border-l-2 border-gray-200">
+                              <div key={task.id} className="pl-2 md:pl-4 border-l-2 border-gray-200">
                                 <TaskItem 
                                   task={task} 
                                   toggleTask={toggleTask} 
@@ -617,10 +617,10 @@ function TodayContent() {
       <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50 md:hidden">
         <button
           onClick={() => setShowTaskForm(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg px-8 py-4 flex items-center justify-center text-lg font-semibold"
+          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-full shadow-lg px-6 py-3 flex items-center justify-center font-semibold min-h-[56px] active:scale-95 transition-transform"
         >
           <Plus className="h-6 w-6 mr-2" />
-          Tareas
+          Nueva Tarea
         </button>
       </div>
     </div>
