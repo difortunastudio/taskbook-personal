@@ -74,7 +74,7 @@ function TodayContent() {
       router.push("/auth/signin")
       return
     }
-    
+
     fetchTasks()
     fetchCompanies()
     fetchProjects()
@@ -133,7 +133,7 @@ function TodayContent() {
       })
 
       if (response.ok) {
-        setTasks(tasks.map(task => 
+        setTasks(tasks.map(task =>
           task.id === taskId ? { ...task, completed } : task
         ))
       }
@@ -152,7 +152,7 @@ function TodayContent() {
 
       if (response.ok) {
         const updatedTask = await response.json()
-        setTasks(tasks.map(task => 
+        setTasks(tasks.map(task =>
           task.id === taskId ? { ...task, notes: updatedTask.notes, updatedAt: updatedTask.updatedAt } : task
         ))
       }
@@ -205,7 +205,7 @@ function TodayContent() {
 
       if (response.ok) {
         const updatedTask = await response.json()
-        setTasks(tasks.map(task => 
+        setTasks(tasks.map(task =>
           task.id === taskId ? updatedTask : task
         ))
         setSelectedTaskForEdit(null)
@@ -235,7 +235,7 @@ function TodayContent() {
     }
   }
 
-  const filteredProjects = projects.filter(project => 
+  const filteredProjects = projects.filter(project =>
     newTask.companyId ? project.company.id === newTask.companyId : true
   )
 
@@ -263,7 +263,7 @@ function TodayContent() {
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">🎯 Mi Día</h2>
             <p className="text-sm md:text-base text-gray-600">Gestiona tus tareas</p>
           </div>
-          <button 
+          <button
             onClick={() => setShowTaskForm(true)}
             className="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg items-center min-h-[44px]"
           >
@@ -392,31 +392,28 @@ function TodayContent() {
               <nav className="-mb-px flex">
                 <button
                   onClick={() => setViewFilter('all')}
-                  className={`flex-1 py-3 md:py-4 px-3 md:px-6 text-xs md:text-sm font-medium border-b-2 min-h-[48px] ${
-                    viewFilter === 'all'
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                  className={`flex-1 py-3 md:py-4 px-3 md:px-6 text-xs md:text-sm font-medium border-b-2 min-h-[48px] ${viewFilter === 'all'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
                 >
                   Todas ({tasks.length})
                 </button>
                 <button
                   onClick={() => setViewFilter('pending')}
-                  className={`flex-1 py-3 md:py-4 px-3 md:px-6 text-xs md:text-sm font-medium border-b-2 min-h-[48px] ${
-                    viewFilter === 'pending'
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                  className={`flex-1 py-3 md:py-4 px-3 md:px-6 text-xs md:text-sm font-medium border-b-2 min-h-[48px] ${viewFilter === 'pending'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
                 >
                   Pendientes ({tasks.filter(t => !t.completed).length})
                 </button>
                 <button
                   onClick={() => setViewFilter('completed')}
-                  className={`flex-1 py-3 md:py-4 px-3 md:px-6 text-xs md:text-sm font-medium border-b-2 min-h-[48px] ${
-                    viewFilter === 'completed'
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                  className={`flex-1 py-3 md:py-4 px-3 md:px-6 text-xs md:text-sm font-medium border-b-2 min-h-[48px] ${viewFilter === 'completed'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
                 >
                   Completadas ({tasks.filter(t => t.completed).length})
                 </button>
@@ -431,7 +428,7 @@ function TodayContent() {
             <Calendar className="h-16 w-16 mx-auto text-gray-300 mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">No tienes tareas</h3>
             <p className="text-gray-600 mb-6">Crea tu primera tarea para empezar a organizarte</p>
-            <button 
+            <button
               onClick={() => setShowTaskForm(true)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg inline-flex items-center"
             >
@@ -444,11 +441,11 @@ function TodayContent() {
             {/* Tareas pendientes */}
             {(viewFilter === 'all' || viewFilter === 'pending') && (() => {
               const pendingTasks = tasks.filter(task => !task.completed)
-              
+
               // Debug adicional para tareas completadas
               const completedTasks = tasks.filter(task => task.completed)
               console.log("✅ DEBUG - Tareas completadas:", completedTasks.length, completedTasks)
-              
+
               if (pendingTasks.length > 0) {
                 // Agrupar por empresa y proyecto con mejor formato
                 const grouped = {} as Record<string, Task[]>
@@ -493,9 +490,9 @@ function TodayContent() {
                           <div className="space-y-2 md:space-y-3">
                             {groupTasks.map(task => (
                               <div key={task.id} className="pl-2 md:pl-4 border-l-2 border-gray-200">
-                                <TaskItem 
-                                  task={task} 
-                                  toggleTask={toggleTask} 
+                                <TaskItem
+                                  task={task}
+                                  toggleTask={toggleTask}
                                   setSelectedTaskForNotes={setSelectedTaskForNotes}
                                   setSelectedTaskForEdit={setSelectedTaskForEdit}
                                   handleDeleteTask={handleDeleteTask}
@@ -509,7 +506,7 @@ function TodayContent() {
                   </div>
                 )
               }
-              
+
               // Si no hay tareas pendientes, mostrar mensaje
               if (viewFilter === 'pending') {
                 return (
@@ -523,7 +520,7 @@ function TodayContent() {
                     <p className="text-gray-600 mb-6">
                       Has completado todas tus tareas. ¿Quieres crear una nueva?
                     </p>
-                    <button 
+                    <button
                       onClick={() => setShowTaskForm(true)}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg inline-flex items-center"
                     >
@@ -539,7 +536,7 @@ function TodayContent() {
             {/* Tareas completadas */}
             {(viewFilter === 'all' || viewFilter === 'completed') && (() => {
               const completedTasks = tasks.filter(task => task.completed)
-              
+
               if (completedTasks.length > 0) {
                 return (
                   <div className="bg-green-50 border border-green-200 rounded-lg shadow-md">
@@ -553,9 +550,9 @@ function TodayContent() {
                     <div className="divide-y divide-green-100">
                       {completedTasks.map((task) => (
                         <div key={task.id} className="p-4">
-                          <TaskItem 
-                            task={task} 
-                            toggleTask={toggleTask} 
+                          <TaskItem
+                            task={task}
+                            toggleTask={toggleTask}
                             setSelectedTaskForNotes={setSelectedTaskForNotes}
                             setSelectedTaskForEdit={setSelectedTaskForEdit}
                             handleDeleteTask={handleDeleteTask}
@@ -578,7 +575,7 @@ function TodayContent() {
                     <p className="text-gray-600 mb-6">
                       Cuando completes tus tareas aparecerán aquí.
                     </p>
-                    <button 
+                    <button
                       onClick={() => setViewFilter('all')}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg inline-flex items-center"
                     >
@@ -636,57 +633,57 @@ function TaskItem({ task, toggleTask, setSelectedTaskForNotes, setSelectedTaskFo
   handleDeleteTask: (taskId: string) => void
 }) {
   return (
-    <div className="p-4 hover:bg-gray-50 transition-colors">
-      <div className="flex items-start justify-between">
-        <div className="flex items-start flex-1">
+    <div className="p-3 md:p-4 hover:bg-gray-50 transition-colors">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-start flex-1 min-w-0">
           <button
             onClick={() => toggleTask(task.id, !task.completed)}
-            className="mr-3 mt-1 p-1"
+            className="mr-2 md:mr-3 mt-0.5 p-2 -ml-2 min-h-[44px] min-w-[44px] flex items-center justify-center active:scale-95 transition-transform"
           >
             {task.completed ? (
-              <CheckCircle className="h-5 w-5 text-green-500" />
+              <CheckCircle className="h-6 w-6 md:h-5 md:w-5 text-green-500" />
             ) : (
-              <Circle className="h-5 w-5 text-gray-400" />
+              <Circle className="h-6 w-6 md:h-5 md:w-5 text-gray-400" />
             )}
           </button>
-          
+
           <div className="flex-1 min-w-0">
-            <h4 className={`font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+            <h4 className={`font-medium text-sm md:text-base ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
               {task.title}
             </h4>
-            
+
             {task.description && (
-              <p className="text-gray-600 mt-1 text-sm">{task.description}</p>
+              <p className="text-gray-600 mt-1 text-xs md:text-sm">{task.description}</p>
             )}
 
             {task.notes && (
               <div className="mt-2 p-2 bg-amber-50 border-l-2 border-amber-200 rounded">
-                <p className="text-sm text-amber-800">
+                <p className="text-xs md:text-sm text-amber-800">
                   <FileText className="h-3 w-3 inline mr-1" />
                   {task.notes}
                 </p>
               </div>
             )}
-            
-            <div className="flex items-center mt-2 space-x-3 text-xs text-gray-500">
+
+            <div className="flex flex-wrap items-center mt-2 gap-x-2 gap-y-1 text-[11px] md:text-xs text-gray-500">
               {task.company && (
                 <div className="flex items-center">
-                  <div 
+                  <div
                     className="w-2 h-2 rounded-full mr-1"
                     style={{ backgroundColor: task.company.color }}
                   ></div>
                   <Building className="h-3 w-3 mr-1" />
-                  <span>{task.company.name}</span>
+                  <span className="truncate max-w-[120px]">{task.company.name}</span>
                 </div>
               )}
-              
+
               {task.project && (
                 <div className="flex items-center">
                   <span className="text-gray-400">•</span>
-                  <span className="ml-1">{task.project.name}</span>
+                  <span className="ml-1 truncate max-w-[120px]">{task.project.name}</span>
                 </div>
               )}
-              
+
               {task.dueDate && (
                 <div className="flex items-center">
                   <span className="text-gray-400">•</span>
@@ -707,27 +704,27 @@ function TaskItem({ task, toggleTask, setSelectedTaskForNotes, setSelectedTaskFo
           </div>
         </div>
 
-        <div className="flex items-center">        <div className="flex items-center space-x-1 ml-3">
+        <div className="flex items-center">        <div className="flex items-center gap-1 ml-2">
           <button
             onClick={() => setSelectedTaskForEdit(task)}
-            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            className="p-2.5 md:p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 active:scale-95"
             title="Editar tarea"
           >
-            <Edit3 className="h-4 w-4" />
+            <Edit3 className="h-5 w-5 md:h-4 md:w-4" />
           </button>
           <button
             onClick={() => setSelectedTaskForNotes(task)}
-            className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+            className="p-2.5 md:p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 active:scale-95"
             title="Añadir/editar notas"
           >
-            <FileText className="h-4 w-4" />
+            <FileText className="h-5 w-5 md:h-4 md:w-4" />
           </button>
           <button
             onClick={() => handleDeleteTask(task.id)}
-            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="p-2.5 md:p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 active:scale-95"
             title="Eliminar tarea"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-5 w-5 md:h-4 md:w-4" />
           </button>
         </div>
         </div>
@@ -753,14 +750,14 @@ function TaskEditModal({ isOpen, onClose, task, companies, projects, onSave }: {
     dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''
   })
 
-  const filteredProjects = projects.filter(project => 
+  const filteredProjects = projects.filter(project =>
     !editData.companyId || project.company.id === editData.companyId
   )
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!editData.title.trim()) return
-    
+
     onSave(task.id, {
       title: editData.title.trim(),
       description: editData.description.trim() || undefined,
@@ -773,20 +770,20 @@ function TaskEditModal({ isOpen, onClose, task, companies, projects, onSave }: {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 md:p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Editar Tarea</h3>
+        <div className="p-4 md:p-6">
+          <div className="flex justify-between items-center mb-3 md:mb-4">
+            <h3 className="text-base md:text-lg font-semibold text-gray-900">Editar Tarea</h3>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 rounded-lg p-1"
+              className="text-gray-400 hover:text-gray-600 rounded-lg p-2 min-h-[44px] min-w-[44px] flex items-center justify-center active:scale-95 transition-transform"
             >
               ✕
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Título *
@@ -795,7 +792,7 @@ function TaskEditModal({ isOpen, onClose, task, companies, projects, onSave }: {
                 type="text"
                 value={editData.title}
                 onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-3 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                 required
               />
             </div>
@@ -807,7 +804,7 @@ function TaskEditModal({ isOpen, onClose, task, companies, projects, onSave }: {
               <textarea
                 value={editData.description}
                 onChange={(e) => setEditData({ ...editData, description: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-3 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                 rows={3}
               />
             </div>
@@ -819,7 +816,7 @@ function TaskEditModal({ isOpen, onClose, task, companies, projects, onSave }: {
               <select
                 value={editData.companyId}
                 onChange={(e) => setEditData({ ...editData, companyId: e.target.value, projectId: '' })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-3 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
               >
                 <option value="">Sin empresa</option>
                 {companies.map((company) => (
@@ -837,7 +834,7 @@ function TaskEditModal({ isOpen, onClose, task, companies, projects, onSave }: {
               <select
                 value={editData.projectId}
                 onChange={(e) => setEditData({ ...editData, projectId: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-3 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                 disabled={!editData.companyId}
               >
                 <option value="">Sin proyecto</option>
@@ -857,21 +854,21 @@ function TaskEditModal({ isOpen, onClose, task, companies, projects, onSave }: {
                 type="date"
                 value={editData.dueDate}
                 onChange={(e) => setEditData({ ...editData, dueDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-3 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
               />
             </div>
 
-            <div className="flex justify-end space-x-3 pt-4">
+            <div className="flex justify-end gap-2 md:gap-3 pt-3 md:pt-4">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                className="px-4 md:px-4 py-3 md:py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors min-h-[44px] text-base active:scale-95"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                className="px-5 md:px-4 py-3 md:py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg transition-all min-h-[44px] text-base active:scale-95"
               >
                 Guardar Cambios
               </button>

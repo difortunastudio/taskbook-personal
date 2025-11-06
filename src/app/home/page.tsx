@@ -172,131 +172,118 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 pb-24 md:pb-8">
       {/* Sidebar y contenido principal, sin header superior */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Mi Cuaderno Virtual</h2>
-          <p className="text-gray-600">Organiza tus tareas y proyectos de manera simple y eficiente</p>
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
+        <div className="mb-6 md:mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">Mi Cuaderno Virtual</h2>
+          <p className="text-sm md:text-base text-gray-600">Organiza tus tareas y proyectos</p>
         </div>
 
         {/* Stats Overview */}
         {!loading && (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-6 md:mb-8">
             <button
               onClick={() => router.push("/today?filter=pending")}
-              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-blue-50 transition-all cursor-pointer"
+              className="bg-white rounded-lg shadow-sm p-3 md:p-4 text-center hover:shadow-md hover:bg-blue-50 transition-all min-h-[80px] active:scale-95"
             >
-              <div className="text-2xl font-bold text-blue-600">{stats.pendingTasks}</div>
-              <div className="text-xs text-gray-600">Tareas pendientes</div>
+              <div className="text-xl md:text-2xl font-bold text-blue-600">{stats.pendingTasks}</div>
+              <div className="text-[10px] md:text-xs text-gray-600 mt-1">Tareas pendientes</div>
             </button>
             <button
               onClick={() => router.push("/today?filter=completed")}
-              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-green-50 transition-all cursor-pointer"
+              className="bg-white rounded-lg shadow-sm p-3 md:p-4 text-center hover:shadow-md hover:bg-green-50 transition-all min-h-[80px] active:scale-95"
             >
-              <div className="text-2xl font-bold text-green-600">{stats.completedTasks}</div>
-              <div className="text-xs text-gray-600">Tareas completadas</div>
+              <div className="text-xl md:text-2xl font-bold text-green-600">{stats.completedTasks}</div>
+              <div className="text-[10px] md:text-xs text-gray-600 mt-1">Completadas</div>
             </button>
             <button
               onClick={() => router.push("/projects")}
-              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-purple-50 transition-all cursor-pointer"
+              className="bg-white rounded-lg shadow-sm p-3 md:p-4 text-center hover:shadow-md hover:bg-purple-50 transition-all min-h-[80px] active:scale-95"
             >
-              <div className="text-2xl font-bold text-purple-600">{stats.totalProjects}</div>
-              <div className="text-xs text-gray-600">Proyectos activos</div>
+              <div className="text-xl md:text-2xl font-bold text-purple-600">{stats.totalProjects}</div>
+              <div className="text-[10px] md:text-xs text-gray-600 mt-1">Proyectos</div>
             </button>
             <button
               onClick={() => router.push("/companies")}
-              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-indigo-50 transition-all cursor-pointer"
+              className="bg-white rounded-lg shadow-sm p-3 md:p-4 text-center hover:shadow-md hover:bg-indigo-50 transition-all min-h-[80px] active:scale-95"
             >
-              <div className="text-2xl font-bold text-indigo-600">{stats.totalCompanies}</div>
-              <div className="text-xs text-gray-600">Empresas</div>
+              <div className="text-xl md:text-2xl font-bold text-indigo-600">{stats.totalCompanies}</div>
+              <div className="text-[10px] md:text-xs text-gray-600 mt-1">Empresas</div>
             </button>
             <button
               onClick={() => router.push("/today")}
-              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md hover:bg-gray-50 transition-all cursor-pointer"
+              className="bg-white rounded-lg shadow-sm p-3 md:p-4 text-center hover:shadow-md hover:bg-gray-50 transition-all min-h-[80px] active:scale-95"
             >
-              <div className="text-2xl font-bold text-gray-600">{stats.totalTasks}</div>
-              <div className="text-xs text-gray-600">Total tareas</div>
+              <div className="text-xl md:text-2xl font-bold text-gray-600">{stats.totalTasks}</div>
+              <div className="text-[10px] md:text-xs text-gray-600 mt-1">Total tareas</div>
             </button>
           </div>
         )}
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
           <div 
             onClick={() => router.push("/today")}
-            className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow"
+            className="bg-white rounded-lg shadow-md p-4 md:p-6 cursor-pointer hover:shadow-lg transition-all active:scale-95"
           >
-            <div className="flex items-center">
-              <Calendar className="h-12 w-12 text-blue-600" />
-              <div className="ml-4">
-                <h3 className="text-lg font-semibold text-gray-900">Mi Día</h3>
-                <p className="text-gray-600">Tareas de hoy</p>
+            <div className="flex flex-col md:flex-row items-center md:items-start">
+              <Calendar className="h-10 w-10 md:h-12 md:w-12 text-blue-600 mb-2 md:mb-0" />
+              <div className="md:ml-4 text-center md:text-left">
+                <h3 className="text-sm md:text-lg font-semibold text-gray-900">Mi Día</h3>
+                <p className="text-xs md:text-base text-gray-600">Tareas de hoy</p>
               </div>
             </div>
           </div>
 
           <div 
             onClick={() => router.push("/companies")}
-            className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow"
+            className="bg-white rounded-lg shadow-md p-4 md:p-6 cursor-pointer hover:shadow-lg transition-all active:scale-95"
           >
-            <div className="flex items-center">
-              <CheckSquare className="h-12 w-12 text-green-600" />
-              <div className="ml-4">
-                <h3 className="text-lg font-semibold text-gray-900">Empresas</h3>
-                <p className="text-gray-600">Gestionar empresas</p>
+            <div className="flex flex-col md:flex-row items-center md:items-start">
+              <CheckSquare className="h-10 w-10 md:h-12 md:w-12 text-green-600 mb-2 md:mb-0" />
+              <div className="md:ml-4 text-center md:text-left">
+                <h3 className="text-sm md:text-lg font-semibold text-gray-900">Empresas</h3>
+                <p className="text-xs md:text-base text-gray-600">Gestionar</p>
               </div>
             </div>
           </div>
 
           <div 
             onClick={() => router.push("/projects")}
-            className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow"
+            className="bg-white rounded-lg shadow-md p-4 md:p-6 cursor-pointer hover:shadow-lg transition-all active:scale-95"
           >
-            <div className="flex items-center">
-              <Plus className="h-12 w-12 text-purple-600" />
-              <div className="ml-4">
-                <h3 className="text-lg font-semibold text-gray-900">Proyectos</h3>
-                <p className="text-gray-600">Ver proyectos</p>
-              </div>
-            </div>
-          </div>
-
-          <div 
-            onClick={() => router.push("/companies/new")}
-            className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow"
-          >
-            <div className="flex items-center">
-              <Plus className="h-12 w-12 text-indigo-600" />
-              <div className="ml-4">
-                <h3 className="text-lg font-semibold text-gray-900">Nueva Empresa</h3>
-                <p className="text-gray-600">Agregar empresa</p>
+            <div className="flex flex-col md:flex-row items-center md:items-start">
+              <Plus className="h-10 w-10 md:h-12 md:w-12 text-purple-600 mb-2 md:mb-0" />
+              <div className="md:ml-4 text-center md:text-left">
+                <h3 className="text-sm md:text-lg font-semibold text-gray-900">Proyectos</h3>
+                <p className="text-xs md:text-base text-gray-600">Ver</p>
               </div>
             </div>
           </div>
 
           <div 
             onClick={() => router.push("/ideas")}
-            className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow"
+            className="bg-white rounded-lg shadow-md p-4 md:p-6 cursor-pointer hover:shadow-lg transition-all active:scale-95"
           >
-            <div className="flex items-center">
-              <BookOpen className="h-12 w-12 text-yellow-600" />
-              <div className="ml-4">
-                <h3 className="text-lg font-semibold text-gray-900">Eureka</h3>
-                <p className="text-gray-600">Tus ideas y notas rápidas</p>
+            <div className="flex flex-col md:flex-row items-center md:items-start">
+              <BookOpen className="h-10 w-10 md:h-12 md:w-12 text-yellow-600 mb-2 md:mb-0" />
+              <div className="md:ml-4 text-center md:text-left">
+                <h3 className="text-sm md:text-lg font-semibold text-gray-900">Eureka</h3>
+                <p className="text-xs md:text-base text-gray-600">Ideas</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-3 sm:space-y-0">
-            <h3 className="text-xl font-semibold text-gray-900">Actividad Reciente</h3>
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+        <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 md:mb-6 gap-3">
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900">Actividad Reciente</h3>
+            <div className="flex flex-col sm:flex-row gap-2">
               <button 
                 onClick={() => router.push("/today")}
-                className="text-sm text-blue-600 hover:text-blue-700 text-left sm:text-center"
+                className="text-sm text-blue-600 hover:text-blue-700 text-left sm:text-center min-h-[44px] px-3 py-2 hover:bg-blue-50 rounded-lg transition-colors active:scale-95"
               >
                 Ver todas las tareas
               </button>

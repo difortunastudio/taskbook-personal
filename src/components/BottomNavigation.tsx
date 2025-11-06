@@ -52,11 +52,10 @@ const BottomNavigation = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center p-3 rounded-lg min-w-[70px] min-h-[60px] transition-all active:scale-95 ${
-                  item.isActive
+                className={`flex flex-col items-center justify-center p-3 rounded-lg min-w-[70px] min-h-[60px] transition-all active:scale-95 ${item.isActive
                     ? "text-blue-600 bg-blue-50"
                     : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 <Icon className="h-6 w-6 mb-1" />
                 <span className="text-[11px] font-medium leading-tight">{item.label}</span>
@@ -81,11 +80,10 @@ const BottomNavigation = () => {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${
-                      item.isActive
+                    className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${item.isActive
                         ? "text-blue-600 bg-blue-50"
                         : "text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-                    }`}
+                      }`}
                   >
                     <Icon className="h-5 w-5" />
                     {item.label}
@@ -96,11 +94,10 @@ const BottomNavigation = () => {
             <li>
               <Link
                 href={eurekaItem.href}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${
-                  eurekaItem.isActive
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${eurekaItem.isActive
                     ? "text-yellow-700 bg-yellow-100 border border-yellow-200"
                     : "text-yellow-600 bg-yellow-50 hover:bg-yellow-100 border border-yellow-200"
-                }`}
+                  }`}
               >
                 <Lightbulb className="h-5 w-5" />
                 <span className="font-semibold">{eurekaItem.label}</span>
