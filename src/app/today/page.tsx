@@ -255,7 +255,7 @@ function TodayContent() {
   console.log("🎯 Estado actual - Tareas:", tasks.length, "Loading:", loading, "Session:", !!session)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 pb-8 md:pb-8">
       {/* Sidebar y contenido principal, sin header superior */}
       <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 md:mb-8 gap-3">
@@ -263,16 +263,14 @@ function TodayContent() {
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">🎯 Mi Día</h2>
             <p className="text-sm md:text-base text-gray-600">Gestiona tus tareas</p>
           </div>
-          <button
+          <button 
             onClick={() => setShowTaskForm(true)}
             className="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg items-center min-h-[44px]"
           >
             <Plus className="h-5 w-5 mr-2" />
             Nueva Tarea
           </button>
-        </div>
-
-        {/* Create Task Form */}
+        </div>        {/* Create Task Form */}
         {showTaskForm && (
           <div className="bg-white rounded-lg shadow-md p-4 md:p-6 mb-4 md:mb-6">
             <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">Crear Nueva Tarea</h3>
@@ -610,16 +608,14 @@ function TodayContent() {
         />
       )}
 
-      {/* Floating Tareas Button (FAB) for mobile */}
-      <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50 md:hidden">
-        <button
-          onClick={() => setShowTaskForm(true)}
-          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-full shadow-lg px-6 py-3 flex items-center justify-center font-semibold min-h-[56px] active:scale-95 transition-transform"
-        >
-          <Plus className="h-6 w-6 mr-2" />
-          Nueva Tarea
-        </button>
-      </div>
+      {/* Floating "Nueva Tarea" Button for mobile */}
+      <button
+        onClick={() => setShowTaskForm(true)}
+        className="md:hidden fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-full shadow-lg p-4 z-50 min-h-[56px] min-w-[56px] active:scale-95 transition-transform flex items-center justify-center"
+        aria-label="Nueva tarea"
+      >
+        <Plus className="h-6 w-6" />
+      </button>
     </div>
   )
 }

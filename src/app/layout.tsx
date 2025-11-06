@@ -5,7 +5,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import DifortunaLogo from "@/components/DifortunaLogo";
 import UserEmailSidebar from "@/components/UserEmailSidebar";
-import { Trash2 } from "lucide-react";
+import MobileHeader from "@/components/MobileHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,19 +60,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-white`}
       >
         <Providers>
-          {/* Header móvil SIEMPRE visible en móvil */}
-          <header className="md:hidden bg-gray-100 border-b border-gray-200 p-4 flex items-center justify-between sticky top-0 z-50">
-            <a href="/home" className="flex items-center gap-2">
-              <DifortunaLogo className="text-blue-600" size={24} variant="simple" />
-              <span className="text-xl font-bold text-gray-900">TaskBook</span>
-            </a>
-            <div className="flex items-center gap-3">
-              <a href="/ideas" className="font-semibold text-yellow-600 bg-yellow-50 rounded px-2 py-1 text-sm">Eureka</a>
-              <a href="/trash" className="text-gray-500 hover:text-red-600 p-1" aria-label="Papelera">
-                <Trash2 className="h-6 w-6" />
-              </a>
-            </div>
-          </header>
+          {/* Header móvil con menú hamburguesa */}
+          <MobileHeader />
 
           <div className="flex flex-1">
             {/* Sidebar Desktop - igual que antes */}
@@ -99,37 +88,11 @@ export default function RootLayout({
               <UserEmailSidebar />
             </aside>
 
-            {/* Main content, padding bottom para que no tape la barra inferior */}
-            <main className="flex-1 flex flex-col min-h-screen pb-16 md:pb-0 bg-white">
+            {/* Main content - sin padding bottom ya que no hay barra inferior */}
+            <main className="flex-1 flex flex-col min-h-screen md:pb-0 bg-white">
               {children}
             </main>
           </div>
-
-          {/* Barra inferior móvil SIN papelera */}
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200 px-4 py-3 z-40">
-            <ul className="flex justify-around items-center">
-              <li>
-                <a href="/home" className="flex flex-col items-center py-3 text-gray-900 hover:text-blue-600">
-                  <span className="text-base">Inicio</span>
-                </a>
-              </li>
-              <li>
-                <a href="/today" className="flex flex-col items-center py-3 text-gray-900 hover:text-blue-600">
-                  <span className="text-base">Tareas</span>
-                </a>
-              </li>
-              <li>
-                <Link href="/projects" className="flex flex-col items-center py-3 text-gray-900 hover:text-blue-600">
-                  <span className="text-base">Proyectos</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/companies" className="flex flex-col items-center py-3 text-gray-900 hover:text-blue-600">
-                  <span className="text-base">Empresas</span>
-                </Link>
-              </li>
-            </ul>
-          </nav>
         </Providers>
       </body>
     </html>

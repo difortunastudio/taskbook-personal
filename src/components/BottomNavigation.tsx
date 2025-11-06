@@ -43,29 +43,7 @@ const BottomNavigation = () => {
 
   return (
     <>
-      {/* Bottom Navigation - Mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-1 py-2 z-50 safe-area-bottom">
-        <div className="flex justify-around items-center max-w-md mx-auto">
-          {navItems.map((item) => {
-            const Icon = item.icon
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex flex-col items-center justify-center p-3 rounded-lg min-w-[70px] min-h-[60px] transition-all active:scale-95 ${item.isActive
-                    ? "text-blue-600 bg-blue-50"
-                    : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                  }`}
-              >
-                <Icon className="h-6 w-6 mb-1" />
-                <span className="text-[11px] font-medium leading-tight">{item.label}</span>
-              </Link>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Sidebar - Desktop */}
+      {/* Sidebar - Solo Desktop */}
       <aside className="hidden md:flex w-56 min-h-screen bg-gray-100 border-r border-gray-200 flex-col py-8 px-4">
         <div className="mb-8 text-center flex items-center justify-center gap-2">
           <Link href="/home" className="flex items-center gap-2">
