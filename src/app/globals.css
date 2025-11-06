@@ -21,7 +21,9 @@ body {
 }
 
 /* Solo fix del color del texto en inputs, manteniendo estilos Tailwind */
-input, textarea, select {
+input,
+textarea,
+select {
   color: #171717;
   /* Asegurar tamaño mínimo de fuente en iOS para evitar zoom */
   font-size: 16px;
@@ -37,6 +39,9 @@ input, textarea, select {
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
 }
 
 /* Mejorar el scroll en iOS */
@@ -44,3 +49,16 @@ input, textarea, select {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Animaciones para el menú móvil */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-in-out;
+}
