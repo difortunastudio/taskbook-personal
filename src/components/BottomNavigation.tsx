@@ -59,8 +59,8 @@ const BottomNavigation = () => {
                   <Link
                     href={item.href}
                     className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${item.isActive
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                      ? "text-blue-600 bg-blue-50"
+                      : "text-gray-900 hover:text-blue-600 hover:bg-gray-50"
                       }`}
                   >
                     <Icon className="h-5 w-5" />
@@ -73,8 +73,8 @@ const BottomNavigation = () => {
               <Link
                 href={eurekaItem.href}
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${eurekaItem.isActive
-                    ? "text-yellow-700 bg-yellow-100 border border-yellow-200"
-                    : "text-yellow-600 bg-yellow-50 hover:bg-yellow-100 border border-yellow-200"
+                  ? "text-yellow-700 bg-yellow-100 border border-yellow-200"
+                  : "text-yellow-600 bg-yellow-50 hover:bg-yellow-100 border border-yellow-200"
                   }`}
               >
                 <Lightbulb className="h-5 w-5" />

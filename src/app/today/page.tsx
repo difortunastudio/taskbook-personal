@@ -263,7 +263,7 @@ function TodayContent() {
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">🎯 Mi Día</h2>
             <p className="text-sm md:text-base text-gray-600">Gestiona tus tareas</p>
           </div>
-          <button 
+          <button
             onClick={() => setShowTaskForm(true)}
             className="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg items-center min-h-[44px]"
           >
